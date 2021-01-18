@@ -1,40 +1,31 @@
 
 test:
-  description: Perform direct execution of the scheduler rule, for testing the action.
+  description: ""
   fields:
     entity_id:
-      description: Identifier of the scheduler rule.
-      example: "switch.scheduler_abcdef"
-    entry:
-      description: Index of the entry (for schedules that have multiple entries)
-      example: 0
+      description: Identifier of the Max! entity.
+      example: ""
 
 remove:
-  description: Remove a scheduler entity
+  description: Remove a Max! entity
   fields:
     entity_id:
-      description: Identifier of the scheduler rule.
-      example: "scheduler.scheduler_abcdef"
+      description: Identifier of the Max! entity.
+      example: ""
 
 add:
-  description: Add a scheduler entitity
+  description: Add a Max! entitity
   fields:
     actions:
-      description: Action to be executed
-      example: '[{service: "turn_on", entity: "light.my_lamp", service_data: {brightness: 200}}]'
-    entries:
-      description: Entries for entity
-      example: '[{time: "12:00", actions: [0]}]'
+      description: ""
+      example: ""
 
 edit:
-  description: Edit a scheduler entitity
+  description: Edit a Max! entitity
   fields:
     entity_id:
-      description: Identifier of the scheduler rule.
-      example: "scheduler.scheduler_abcdef"
+      description: Identifier of the Max! entity.
+      example: ""
     actions:
-      description: Action to be executed
-      example: '[{service: "turn_on", entity: "light.my_lamp", service_data: {brightness: 200}}]'
-    entries:
-      description: Entries for entity
-      example: '[{time: "12:00", actions: [0]}]'
+      description:""
+      example: ""

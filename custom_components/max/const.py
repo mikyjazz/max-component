@@ -79,9 +79,9 @@ HM_IMPULSE_EVENTS = ["SEQUENCE_OK"]
 
 CONF_RESOLVENAMES_OPTIONS = ["metadata", "json", "xml", False]
 
-DATA_MAX = "max"
-DATA_STORE = "max_store"
-DATA_CONF = "max_conf"
+DATA_MAX = "homematic"
+DATA_STORE = "homematic_store"
+DATA_CONF = "homematic_conf"
 
 CONF_INTERFACES = "interfaces"
 CONF_LOCAL_IP = "local_ip"

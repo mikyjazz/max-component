@@ -41,7 +41,7 @@ class MaxBinarySensor(HMDevice, BinarySensorEntity):
     @property
     def device_class(self):
         """Return the class of this sensor from DEVICE_CLASSES."""
-        return SENSOR_TYPES_CLASS.get(self._hmdevice.__class__.__name__)
+        return SENSOR_TYPES_CLASS.get(self._maxdevice.__class__.__name__)
 
     def _init_data_struct(self):
         """Generate the data dictionary (self._data) from metadata."""

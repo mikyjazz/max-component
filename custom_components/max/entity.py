@@ -25,7 +25,7 @@ SCAN_INTERVAL_VARIABLES = timedelta(seconds=30)
 
 
 class HMDevice(Entity):
-    """The HomeMatic device base object."""
+    """The Max! device base object."""
 
     def __init__(self, config):
         """Initialize a generic HomeMatic device."""
@@ -37,7 +37,7 @@ class HMDevice(Entity):
         self._unique_id = config.get(ATTR_UNIQUE_ID)
         self._data = {}
         self._homegear = None
-        self._hmdevice = None
+        self._maxdevice = None
         self._connected = False
         self._available = False
         self._channel_map = set()
@@ -76,7 +76,7 @@ class HMDevice(Entity):
 
         # Static attributes
         attr = {
-            "id": self._hmdevice.ADDRESS,
+            "id": self._maxdevice.ADDRESS,
             "interface": self._interface,
         }
 
@@ -96,7 +96,7 @@ class HMDevice(Entity):
 
         # Initialize
         self._homegear = self.hass.data[DATA_MAX]
-        self._hmdevice = self._homegear.devices[self._interface][self._address]
+        self._maxdevice = self._homegear.devices[self._interface][self._address]
         self._connected = True
 
         try:
@@ -105,7 +105,7 @@ class HMDevice(Entity):
             self._load_data_from_hm()
 
             # Link events from pyhomematic
-            self._available = not self._hmdevice.UNREACH
+            self._available = not self._maxdevice.UNREACH
         except Exception as err:  # pylint: disable=broad-except
             self._connected = False
             _LOGGER.error("Exception while linking %s: %s", self._address, str(err))
@@ -120,8 +120,8 @@ class HMDevice(Entity):
             has_changed = True
 
         # Availability has changed
-        if self.available != (not self._hmdevice.UNREACH):
-            self._available = not self._hmdevice.UNREACH
+        if self.available != (not self._maxdevice.UNREACH):
+            self._available = not self._maxdevice.UNREACH
             has_changed = True
 
         # If it has changed data point, update Home Assistant
@@ -131,12 +131,12 @@ class HMDevice(Entity):
     def _subscribe_homegear_events(self):
         """Subscribe all required events to handle job."""
         for metadata in (
-            self._hmdevice.SENSORNODE,
-            self._hmdevice.BINARYNODE,
-            self._hmdevice.ATTRIBUTENODE,
-            self._hmdevice.WRITENODE,
-            self._hmdevice.EVENTNODE,
-            self._hmdevice.ACTIONNODE,
+            self._maxdevice.SENSORNODE,
+            self._maxdevice.BINARYNODE,
+            self._maxdevice.ATTRIBUTENODE,
+            self._maxdevice.WRITENODE,
+            self._maxdevice.EVENTNODE,
+            self._maxdevice.ACTIONNODE,
         ):
             for node, channels in metadata.items():
                 # Data is needed for this instance
@@ -150,7 +150,7 @@ class HMDevice(Entity):
                     self._channel_map.add(f"{node}:{channel!s}")
 
         # Set callbacks
-        self._hmdevice.setEventCallback(callback=self._hm_event_callback, bequeath=True)
+        self._maxdevice.setEventCallback(callback=self._hm_event_callback, bequeath=True)
 
     def _load_data_from_hm(self):
         """Load first value from pyhomematic."""
@@ -159,10 +159,10 @@ class HMDevice(Entity):
 
         # Read data from pyhomematic
         for metadata, funct in (
-            (self._hmdevice.ATTRIBUTENODE, self._hmdevice.getAttributeData),
-            (self._hmdevice.WRITENODE, self._hmdevice.getWriteData),
-            (self._hmdevice.SENSORNODE, self._hmdevice.getSensorData),
-            (self._hmdevice.BINARYNODE, self._hmdevice.getBinaryData),
+            (self._maxdevice.ATTRIBUTENODE, self._maxdevice.getAttributeData),
+            (self._maxdevice.WRITENODE, self._maxdevice.getWriteData),
+            (self._maxdevice.SENSORNODE, self._maxdevice.getSensorData),
+            (self._maxdevice.BINARYNODE, self._maxdevice.getBinaryData),
         ):
             for node in metadata:
                 if metadata[node] and node in self._data:
@@ -184,7 +184,7 @@ class HMDevice(Entity):
     def _init_data(self):
         """Generate a data dict (self._data) from the HomeMatic metadata."""
         # Add all attributes to data dictionary
-        for data_note in self._hmdevice.ATTRIBUTENODE:
+        for data_note in self._maxdevice.ATTRIBUTENODE:
             self._data.update({data_note: None})
 
         # Initialize device specific data

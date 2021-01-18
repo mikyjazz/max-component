@@ -63,10 +63,10 @@ class HMThermostat(HMDevice, ClimateEntity):
 
         Need to be one of HVAC_MODE_*.
         """
-        if self.target_temperature <= self._hmdevice.OFF_VALUE + 0.5:
+        if self.target_temperature <= self._maxdevice.OFF_VALUE + 0.5:
             return HVAC_MODE_OFF
-        if "MANU_MODE" in self._hmdevice.ACTIONNODE:
-            if self._hm_control_mode == self._hmdevice.MANU_MODE:
+        if "MANU_MODE" in self._maxdevice.ACTIONNODE:
+            if self._hm_control_mode == self._maxdevice.MANU_MODE:
                 return HVAC_MODE_HEAT
             return HVAC_MODE_AUTO
 
@@ -81,7 +81,7 @@ class HMThermostat(HMDevice, ClimateEntity):
 
         Need to be a subset of HVAC_MODES.
         """
-        if "AUTO_MODE" in self._hmdevice.ACTIONNODE:
+        if "AUTO_MODE" in self._maxdevice.ACTIONNODE:
             return [HVAC_MODE_AUTO, HVAC_MODE_HEAT, HVAC_MODE_OFF]
         return [HVAC_MODE_HEAT, HVAC_MODE_OFF]
 
@@ -106,7 +106,7 @@ class HMThermostat(HMDevice, ClimateEntity):
     def preset_modes(self):
         """Return a list of available preset modes."""
         preset_modes = []
-        for mode in self._hmdevice.ACTIONNODE:
+        for mode in self._maxdevice.ACTIONNODE:
             if mode in HM_PRESET_MAP:
                 preset_modes.append(HM_PRESET_MAP[mode])
         return preset_modes
@@ -136,25 +136,25 @@ class HMThermostat(HMDevice, ClimateEntity):
         if temperature is None:
             return None
 
-        self._hmdevice.writeNodeData(self._state, float(temperature))
+        self._maxdevice.writeNodeData(self._state, float(temperature))
 
     def set_hvac_mode(self, hvac_mode):
         """Set new target hvac mode."""
         if hvac_mode == HVAC_MODE_AUTO:
-            self._hmdevice.MODE = self._hmdevice.AUTO_MODE
+            self._maxdevice.MODE = self._maxdevice.AUTO_MODE
         elif hvac_mode == HVAC_MODE_HEAT:
-            self._hmdevice.MODE = self._hmdevice.MANU_MODE
+            self._maxdevice.MODE = self._maxdevice.MANU_MODE
         elif hvac_mode == HVAC_MODE_OFF:
-            self._hmdevice.turnoff()
+            self._maxdevice.turnoff()
 
     def set_preset_mode(self, preset_mode: str) -> None:
         """Set new preset mode."""
         if preset_mode == PRESET_BOOST:
-            self._hmdevice.MODE = self._hmdevice.BOOST_MODE
+            self._maxdevice.MODE = self._maxdevice.BOOST_MODE
         elif preset_mode == PRESET_COMFORT:
-            self._hmdevice.MODE = self._hmdevice.COMFORT_MODE
+            self._maxdevice.MODE = self._maxdevice.COMFORT_MODE
         elif preset_mode == PRESET_ECO:
-            self._hmdevice.MODE = self._hmdevice.LOWERING_MODE
+            self._maxdevice.MODE = self._maxdevice.LOWERING_MODE
 
     @property
     def min_temp(self):
@@ -182,14 +182,14 @@ class HMThermostat(HMDevice, ClimateEntity):
 
     def _init_data_struct(self):
         """Generate a data dict (self._data) from the Max! metadata."""
-        self._state = next(iter(self._hmdevice.WRITENODE.keys()))
+        self._state = next(iter(self._maxdevice.WRITENODE.keys()))
         self._data[self._state] = None
 
         if (
-            HM_CONTROL_MODE in self._hmdevice.ATTRIBUTENODE
-            or HMIP_CONTROL_MODE in self._hmdevice.ATTRIBUTENODE
+            HM_CONTROL_MODE in self._maxdevice.ATTRIBUTENODE
+            or HMIP_CONTROL_MODE in self._maxdevice.ATTRIBUTENODE
         ):
             self._data[HM_CONTROL_MODE] = None
 
-        for node in self._hmdevice.SENSORNODE.keys():
+        for node in self._maxdevice.SENSORNODE.keys():
             self._data[node] = None

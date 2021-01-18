@@ -1,4 +1,4 @@
-"""Notification support for Homematic."""
+"""Notification support for Max!."""
 import voluptuous as vol
 
 from homeassistant.components.notify import (
@@ -31,7 +31,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 
 
 def get_service(hass, config, discovery_info=None):
-    """Get the Homematic notification service."""
+    """Get the Max! notification service."""
     data = {
         ATTR_ADDRESS: config[ATTR_ADDRESS],
         ATTR_CHANNEL: config[ATTR_CHANNEL],
@@ -41,11 +41,11 @@ def get_service(hass, config, discovery_info=None):
     if ATTR_INTERFACE in config:
         data[ATTR_INTERFACE] = config[ATTR_INTERFACE]
 
-    return HomematicNotificationService(hass, data)
+    return MaxNotificationService(hass, data)
 
 
-class HomematicNotificationService(BaseNotificationService):
-    """Implement the notification service for Homematic."""
+class MaxNotificationService(BaseNotificationService):
+    """Implement the notification service for Max!."""
 
     def __init__(self, hass, data):
         """Initialize the service."""
