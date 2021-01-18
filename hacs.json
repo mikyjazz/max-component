@@ -1,6 +1,3 @@
 {
-  "name": "Max! component",
-  "render_readme": "true",
-  "iot_class": ["Local Push"],
-  "domains": ["switch"]
+  "name": "Max! component"
 }
