@@ -1,3 +1,6 @@
 {
-  "name": "Max! component"
+  "name": "Max! component",
+  "domains": ["climate"],
+  "homeassistant": "0.96.0",
+  "render_readme": false
 }

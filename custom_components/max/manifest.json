@@ -1,12 +1,11 @@
 {
-  "domain": "climate",
-  "name": "Max! integration",
+  "domain": "max",
+  "name": "Max! component",
   "documentation": "https://github.com/mikyjazz/max-component",
   "issue_tracker": "https://github.com/mikyjazz/max-component/issues",
   "dependencies": [],
   "codeowners": [
     "@mikyjazz"
   ],
-  "requirements": [],
-  "config_flow": true
+  "requirements": []
 }
