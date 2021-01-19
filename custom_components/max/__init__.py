@@ -240,7 +240,7 @@ def setup(hass, config):
         localport=config[DOMAIN].get(CONF_LOCAL_PORT, DEFAULT_LOCAL_PORT),
         remotes=remotes,
         systemcallback=bound_system_callback,
-        interface_id="homeassistant",
+        interface_id="homeassistant-test",
     )
 
     # Start server thread, connect to hosts, initialize to receive events

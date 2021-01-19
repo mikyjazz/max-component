@@ -1,5 +1,36 @@
 [
     {
+        "CHILDREN": [
+            "VCU0000036:0",
+            "VCU0000036:1",
+            "VCU0000036:3",
+            "VCU0000036:4"
+        ],
+        "FIRMWARE": "1.5",
+        "PARAMSETS": [
+            "MASTER"
+        ],
+        "FLAGS": 1,
+        "TYPE": "BC-RT-TRX-CyG",
+        "RF_ADDRESS": 1234567,
+        "VERSION": 1,
+        "RX_MODE": 2,
+        "CHANNELS": [
+            0,
+            1,
+            3,
+            4
+        ],
+        "ROAMING": 0,
+        "PARENT": "",
+        "INTERFACE": "VCU0000000",
+        "TYPE_ID": 511,
+        "ADDRESS": "VCU0000036",
+        "ID": 1,
+        "FAMILY": 4,
+        "PHYSICAL_ADDRESS": 161452
+    },
+    {
         "LINK_SOURCE_ROLES": "",
         "PARAMSETS": [
             "MASTER",

@@ -12,7 +12,7 @@ import socket
 #from socketserver import ThreadingMixIn
 import logging
 
-#from pymax import devicetypes
+from . import devicetypes
 from .devicetypes.generic import HGChannel
 
 LOG = logging.getLogger(__name__)
@@ -646,7 +646,6 @@ class ServerThread(threading.Thread):
                 LOG.warning("Failed connecting to proxy at http://%s:%i%s" %
                             (host['ip'], host['port'], host['path']))
                 LOG.debug("__init__: Exception: %s" % str(err))
-                # pylint: disable=raise-missing-from
                 raise Exception
             try:
                 host['type'] = BACKEND_UNKNOWN

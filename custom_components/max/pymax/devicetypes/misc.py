@@ -26,7 +26,7 @@ class Remote(HGEvent, HelperEventRemote, HelperActionPress, HelperRssiPeer):
 
     @property
     def ELEMENT(self):
-        if "RC-2" in self.TYPE or "PB-2" in self.TYPE or "WRC2" in self.TYPE or "BRC2" in self.TYPE or "WRCC2" in self.TYPE:
+        if "PB-2" in self.TYPE:
             return [1, 2]
         return [1]
 

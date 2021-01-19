@@ -1,31 +1,87 @@
+# Describes the format for available component services
 
-test:
-  description: ""
+virtualkey:
+  description: Press a virtual key from CCU/Homegear or simulate keypress.
+  fields:
+    address:
+      description: Address of homematic device or BidCoS-RF for virtual remote.
+      example: BidCoS-RF
+    channel:
+      description: Channel for calling a keypress.
+      example: 1
+    param:
+      description: Event to send i.e. PRESS_LONG, PRESS_SHORT.
+      example: PRESS_LONG
+    interface:
+      description: (Optional) for set an interface value.
+      example: Interfaces name from config
+
+set_variable_value:
+  description: Set the name of a node.
   fields:
     entity_id:
-      description: Identifier of the Max! entity.
-      example: ""
+      description: Name(s) of max central to set value.
+      example: "max.ccu2"
+    name:
+      description: Name of the variable to set.
+      example: "testvariable"
+    value:
+      description: New value
+      example: 1
 
-remove:
-  description: Remove a Max! entity
+set_device_value:
+  description: Set a device property on RPC XML interface.
   fields:
-    entity_id:
-      description: Identifier of the Max! entity.
-      example: ""
+    address:
+      description: Address of max device or BidCoS-RF for virtual remote
+      example: BidCoS-RF
+    channel:
+      description: Channel for calling a keypress
+      example: 1
+    param:
+      description: Event to send i.e. PRESS_LONG, PRESS_SHORT
+      example: PRESS_LONG
+    interface:
+      description: (Optional) for set an interface value
+      example: Interfaces name from config
+    value:
+      description: New value
+      example: 1
 
-add:
-  description: Add a Max! entitity
-  fields:
-    actions:
-      description: ""
-      example: ""
+reconnect:
+  description: Reconnect to all Max! Hubs.
 
-edit:
-  description: Edit a Max! entitity
+set_install_mode:
+  description: Set a RPC XML interface into installation mode.
   fields:
-    entity_id:
-      description: Identifier of the Max! entity.
-      example: ""
-    actions:
-      description:""
-      example: ""
+    interface:
+      description: Select the given interface into install mode
+      example: Interfaces name from config
+    mode:
+      description: (Default 1) 1= Normal mode / 2= Remove exists old links
+      example: 1
+    time:
+      description: (Default 60) Time in seconds to run in install mode
+      example: 1
+    address:
+      description: (Optional) Address of homematic device or BidCoS-RF to learn
+      example: QEC3948571
+
+put_paramset:
+  description: Call to putParamset in the RPC XML interface
+  fields:
+    interface:
+      description: The interfaces name from the config
+      example: wireless
+    address:
+      description: Address of Max! device
+      example: QEC3948571:0
+    paramset_key:
+      description: The paramset_key argument to putParamset
+      example: MASTER
+    paramset:
+      description: A paramset dictionary
+      example: '{"WEEK_PROGRAM_POINTER": 1}'
+    rx_mode:
+      description: The receive mode used.
+      example: BURST
