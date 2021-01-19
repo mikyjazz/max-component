@@ -1,10 +1,10 @@
 """Constants for the Max! component."""
 
-DOMAIN = "homematic"
+DOMAIN = "max"
 
-DISCOVER_BINARY_SENSORS = "homematic.binary_sensor"
-DISCOVER_CLIMATE = "homematic.climate"
-DISCOVER_BATTERY = "homematic.battery"
+DISCOVER_BINARY_SENSORS = "max.binary_sensor"
+DISCOVER_CLIMATE = "max.climate"
+DISCOVER_BATTERY = "max.battery"
 
 ATTR_DISCOVER_DEVICES = "devices"
 ATTR_PARAM = "param"
@@ -25,9 +25,9 @@ ATTR_DISCOVERY_TYPE = "discovery_type"
 ATTR_LOW_BAT = "LOW_BAT"
 ATTR_LOWBAT = "LOWBAT"
 
-EVENT_KEYPRESS = "homematic.keypress"
-EVENT_IMPULSE = "homematic.impulse"
-EVENT_ERROR = "homematic.error"
+EVENT_KEYPRESS = "max.keypress"
+EVENT_IMPULSE = "max.impulse"
+EVENT_ERROR = "max.error"
 
 SERVICE_VIRTUALKEY = "virtualkey"
 SERVICE_RECONNECT = "reconnect"
@@ -79,9 +79,9 @@ HM_IMPULSE_EVENTS = ["SEQUENCE_OK"]
 
 CONF_RESOLVENAMES_OPTIONS = ["metadata", "json", "xml", False]
 
-DATA_MAX = "homematic"
-DATA_STORE = "homematic_store"
-DATA_CONF = "homematic_conf"
+DATA_MAX = "max"
+DATA_STORE = "max_store"
+DATA_CONF = "max_conf"
 
 CONF_INTERFACES = "interfaces"
 CONF_LOCAL_IP = "local_ip"

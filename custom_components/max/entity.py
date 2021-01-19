@@ -24,11 +24,11 @@ SCAN_INTERVAL_HUB = timedelta(seconds=300)
 SCAN_INTERVAL_VARIABLES = timedelta(seconds=30)
 
 
-class HMDevice(Entity):
+class HGDevice(Entity):
     """The Max! device base object."""
 
     def __init__(self, config):
-        """Initialize a generic HomeMatic device."""
+        """Initialize a generic Max! device."""
         self._name = config.get(ATTR_NAME)
         self._address = config.get(ATTR_ADDRESS)
         self._interface = config.get(ATTR_INTERFACE)
@@ -52,12 +52,12 @@ class HMDevice(Entity):
 
     @property
     def unique_id(self):
-        """Return unique ID. HomeMatic entity IDs are unique by default."""
+        """Return unique ID. Max! entity IDs are unique by default."""
         return self._unique_id.replace(" ", "_")
 
     @property
     def should_poll(self):
-        """Return false. HomeMatic states are pushed by the XML-RPC Server."""
+        """Return false. Max! states are pushed by the XML-RPC Server."""
         return False
 
     @property
@@ -90,7 +90,7 @@ class HMDevice(Entity):
         return attr
 
     def update(self):
-        """Connect to HomeMatic init values."""
+        """Connect to Max! init values."""
         if self._connected:
             return True
 
@@ -104,14 +104,14 @@ class HMDevice(Entity):
             self._init_data()
             self._load_data_from_hm()
 
-            # Link events from pyhomematic
+            # Link events from pymax
             self._available = not self._maxdevice.UNREACH
         except Exception as err:  # pylint: disable=broad-except
             self._connected = False
             _LOGGER.error("Exception while linking %s: %s", self._address, str(err))
 
     def _hm_event_callback(self, device, caller, attribute, value):
-        """Handle all pyhomematic device events."""
+        """Handle all pymax device events."""
         has_changed = False
 
         # Is data needed for this instance?
@@ -153,11 +153,11 @@ class HMDevice(Entity):
         self._maxdevice.setEventCallback(callback=self._hm_event_callback, bequeath=True)
 
     def _load_data_from_hm(self):
-        """Load first value from pyhomematic."""
+        """Load first value from pymax."""
         if not self._connected:
             return False
 
-        # Read data from pyhomematic
+        # Read data from pymax
         for metadata, funct in (
             (self._maxdevice.ATTRIBUTENODE, self._maxdevice.getAttributeData),
             (self._maxdevice.WRITENODE, self._maxdevice.getWriteData),
@@ -195,11 +195,11 @@ class HMDevice(Entity):
         """Generate a data dictionary from the HomeMatic device metadata."""
 
 
-class HMHub(Entity):
-    """The HomeMatic hub. (CCU2/HomeGear)."""
+class HGHub(Entity):
+    """The Max! hub. (CCU2/HomeGear)."""
 
     def __init__(self, hass, homegear, name):
-        """Initialize HomeMatic hub."""
+        """Initialize Max! hub."""
         self.hass = hass
         self.entity_id = f"{DOMAIN}.{name.lower()}"
         self._homegear = homegear

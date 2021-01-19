@@ -13,7 +13,7 @@ from homeassistant.components.climate.const import (
 from homeassistant.const import ATTR_TEMPERATURE, TEMP_CELSIUS
 
 from .const import ATTR_DISCOVER_DEVICES, HM_ATTRIBUTE_SUPPORT
-from .entity import HMDevice
+from .entity import HGDevice
 
 HM_TEMP_MAP = ["ACTUAL_TEMPERATURE", "TEMPERATURE"]
 
@@ -38,13 +38,13 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
 
     devices = []
     for conf in discovery_info[ATTR_DISCOVER_DEVICES]:
-        new_device = HMThermostat(conf)
+        new_device = HGThermostat(conf)
         devices.append(new_device)
 
     add_entities(devices, True)
 
 
-class HMThermostat(HMDevice, ClimateEntity):
+class HGThermostat(HGDevice, ClimateEntity):
     """Representation of a Max! thermostat."""
 
     @property

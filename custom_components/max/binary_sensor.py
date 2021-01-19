@@ -6,7 +6,7 @@ from homeassistant.components.binary_sensor import (
 )
 
 from .const import ATTR_DISCOVER_DEVICES, ATTR_DISCOVERY_TYPE, DISCOVER_BATTERY
-from .entity import HMDevice
+from .entity import HGDevice
 
 SENSOR_TYPES_CLASS = {
     "MaxShutterContact": DEVICE_CLASS_OPENING,
@@ -28,7 +28,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     add_entities(devices, True)
 
 
-class MaxBinarySensor(HMDevice, BinarySensorEntity):
+class MaxBinarySensor(HGDevice, BinarySensorEntity):
     """Representation of a binary Max! device."""
 
     @property
@@ -50,7 +50,7 @@ class MaxBinarySensor(HMDevice, BinarySensorEntity):
             self._data.update({self._state: None})
 
 
-class MaxBatterySensor(HMDevice, BinarySensorEntity):
+class MaxBatterySensor(HGDevice, BinarySensorEntity):
     """Representation of an HomeMatic low battery sensor."""
 
     @property

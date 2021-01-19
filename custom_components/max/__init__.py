@@ -3,7 +3,7 @@ from datetime import datetime
 from functools import partial
 import logging
 
-from pyhomematic import HMConnection
+from .pymax import HGConnection
 import voluptuous as vol
 
 from homeassistant.const import (
@@ -71,7 +71,7 @@ from .const import (
     SERVICE_SET_VARIABLE_VALUE,
     SERVICE_VIRTUALKEY,
 )
-from .entity import HMHub
+from .entity import HGHub
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -207,7 +207,7 @@ def setup(hass, config):
     hass.data[DATA_CONF] = remotes = {}
     hass.data[DATA_STORE] = set()
 
-    # Create hosts-dictionary for pyhomematic
+    # Create hosts-dictionary for pymax
     for rname, rconfig in conf[CONF_INTERFACES].items():
         remotes[rname] = {
             "ip": rconfig.get(CONF_HOST),
@@ -235,7 +235,7 @@ def setup(hass, config):
 
     # Create server thread
     bound_system_callback = partial(_system_callback_handler, hass, config)
-    hass.data[DATA_MAX] = homegear = HMConnection(
+    hass.data[DATA_MAX] = homegear = HGConnection(
         local=config[DOMAIN].get(CONF_LOCAL_IP),
         localport=config[DOMAIN].get(CONF_LOCAL_PORT, DEFAULT_LOCAL_PORT),
         remotes=remotes,
@@ -252,7 +252,7 @@ def setup(hass, config):
     # Init homegear hubs
     entity_hubs = []
     for hub_name in conf[CONF_HOSTS]:
-        entity_hubs.append(HMHub(hass, homegear, hub_name))
+        entity_hubs.append(HGHub(hass, homegear, hub_name))
 
     def _hm_service_virtualkey(service):
         """Service to handle virtualkey servicecalls."""
@@ -261,23 +261,23 @@ def setup(hass, config):
         param = service.data.get(ATTR_PARAM)
 
         # Device not found
-        hmdevice = _device_from_servicecall(hass, service)
-        if hmdevice is None:
+        hgdevice = _device_from_servicecall(hass, service)
+        if hgdevice is None:
             _LOGGER.error("%s not found for service virtualkey!", address)
             return
 
         # Parameter doesn't exist for device
-        if param not in hmdevice.ACTIONNODE:
+        if param not in hgdevice.ACTIONNODE:
             _LOGGER.error("%s not datapoint in hm device %s", param, address)
             return
 
         # Channel doesn't exist for device
-        if channel not in hmdevice.ACTIONNODE[param]:
+        if channel not in hgdevice.ACTIONNODE[param]:
             _LOGGER.error("%i is not a channel in hm device %s", channel, address)
             return
 
         # Call parameter
-        hmdevice.actionNodeData(param, True, channel)
+        hgdevice.actionNodeData(param, True, channel)
 
     hass.services.register(
         DOMAIN,
@@ -348,12 +348,12 @@ def setup(hass, config):
                 value = str(value)
 
         # Device not found
-        hmdevice = _device_from_servicecall(hass, service)
-        if hmdevice is None:
+        hgdevice = _device_from_servicecall(hass, service)
+        if hgdevice is None:
             _LOGGER.error("%s not found!", address)
             return
 
-        hmdevice.setValue(param, value, channel)
+        hgdevice.setValue(param, value, channel)
 
     hass.services.register(
         DOMAIN,
@@ -431,10 +431,10 @@ def _system_callback_handler(hass, config, src, *args):
         # Search all devices with an EVENTNODE that includes data
         bound_event_callback = partial(_hm_event_handler, hass, interface)
         for dev in addresses:
-            hmdevice = hass.data[DATA_MAX].devices[interface].get(dev)
+            hgdevice = hass.data[DATA_MAX].devices[interface].get(dev)
 
-            if hmdevice.EVENTNODE:
-                hmdevice.setEventCallback(callback=bound_event_callback, bequeath=True)
+            if hgdevice.EVENTNODE:
+                hgdevice.setEventCallback(callback=bound_event_callback, bequeath=True)
 
         # Create Home Assistant entities
         if addresses:
@@ -533,7 +533,7 @@ def _get_devices(hass, discovery_type, keys, interface):
 
 def _create_ha_id(name, channel, param, count):
     """Generate a unique entity id."""
-    # HMDevice is a simple device
+    # HGDevice is a simple device
     if count == 1 and param is None:
         return name
 
@@ -551,32 +551,32 @@ def _create_ha_id(name, channel, param, count):
 
 
 def _hm_event_handler(hass, interface, device, caller, attribute, value):
-    """Handle all pyhomematic device events."""
+    """Handle all pymax device events."""
     try:
         channel = int(device.split(":")[1])
         address = device.split(":")[0]
-        hmdevice = hass.data[DATA_MAX].devices[interface].get(address)
+        hgdevice = hass.data[DATA_MAX].devices[interface].get(address)
     except (TypeError, ValueError):
         _LOGGER.error("Event handling channel convert error!")
         return
 
     # Return if not an event supported by device
-    if attribute not in hmdevice.EVENTNODE:
+    if attribute not in hgdevice.EVENTNODE:
         return
 
-    _LOGGER.debug("Event %s for %s channel %i", attribute, hmdevice.NAME, channel)
+    _LOGGER.debug("Event %s for %s channel %i", attribute, hgdevice.NAME, channel)
 
     # Keypress event
     if attribute in HM_PRESS_EVENTS:
         hass.bus.fire(
             EVENT_KEYPRESS,
-            {ATTR_NAME: hmdevice.NAME, ATTR_PARAM: attribute, ATTR_CHANNEL: channel},
+            {ATTR_NAME: hgdevice.NAME, ATTR_PARAM: attribute, ATTR_CHANNEL: channel},
         )
         return
 
     # Impulse event
     if attribute in HM_IMPULSE_EVENTS:
-        hass.bus.fire(EVENT_IMPULSE, {ATTR_NAME: hmdevice.NAME, ATTR_CHANNEL: channel})
+        hass.bus.fire(EVENT_IMPULSE, {ATTR_NAME: hgdevice.NAME, ATTR_CHANNEL: channel})
         return
 
     _LOGGER.warning("Event is unknown and not forwarded")
