@@ -177,7 +177,7 @@ class HGThermostat(HGDevice, ClimateEntity):
         if HMIP_CONTROL_MODE in self._data:
             return self._data[HMIP_CONTROL_MODE]
 
-        # Homematic
+        # Max!
         return self._data.get("CONTROL_MODE")
 
     def _init_data_struct(self):

@@ -287,7 +287,7 @@ def setup(hass, config):
     )
 
     def _service_handle_value(service):
-        """Service to call setValue method for HomeMatic system variable."""
+        """Service to call setValue method for Max! system variable."""
         entity_ids = service.data.get(ATTR_ENTITY_ID)
         name = service.data[ATTR_NAME]
         value = service.data[ATTR_VALUE]
@@ -379,7 +379,7 @@ def setup(hass, config):
     )
 
     def _service_put_paramset(service):
-        """Service to call the putParamset method on a HomeMatic connection."""
+        """Service to call the putParamset method on a Max! connection."""
         interface = service.data.get(ATTR_INTERFACE)
         address = service.data.get(ATTR_ADDRESS)
         paramset_key = service.data.get(ATTR_PARAMSET_KEY)

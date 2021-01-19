@@ -182,7 +182,7 @@ class HGDevice(Entity):
         return None
 
     def _init_data(self):
-        """Generate a data dict (self._data) from the HomeMatic metadata."""
+        """Generate a data dict (self._data) from the Max! metadata."""
         # Add all attributes to data dictionary
         for data_note in self._maxdevice.ATTRIBUTENODE:
             self._data.update({data_note: None})
@@ -192,7 +192,7 @@ class HGDevice(Entity):
 
     @abstractmethod
     def _init_data_struct(self):
-        """Generate a data dictionary from the HomeMatic device metadata."""
+        """Generate a data dictionary from the Max! device metadata."""
 
 
 class HGHub(Entity):
@@ -223,7 +223,7 @@ class HGHub(Entity):
 
     @property
     def should_poll(self):
-        """Return false. HomeMatic Hub object updates variables."""
+        """Return false. Max! Hub object updates variables."""
         return False
 
     @property

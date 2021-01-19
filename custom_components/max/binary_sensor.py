@@ -51,7 +51,7 @@ class MaxBinarySensor(HGDevice, BinarySensorEntity):
 
 
 class MaxBatterySensor(HGDevice, BinarySensorEntity):
-    """Representation of an HomeMatic low battery sensor."""
+    """Representation of an Max! low battery sensor."""
 
     @property
     def device_class(self):

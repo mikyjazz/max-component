@@ -683,11 +683,6 @@ class ServerThread(threading.Thread):
             LOG.debug("ServerThread.proxyInit: init('http://%s:%i', '%s')" %
                       (callbackip, callbackport, interface_id))
             try:
-                # For HomeMatic IP, init is not working correctly. We fetch the device list and create
-                # the device objects before the init is performed.
-                if proxy._remoteport in [2010, 32010, 42010]:
-                    dev_list = proxy.listDevices(interface_id)
-                    self._rpcfunctions.newDevices(interface_id=interface_id, dev_descriptions=dev_list)
                 proxy.init("http://%s:%i" %
                            (callbackip, callbackport), interface_id)
                 LOG.info("Proxy for %s initialized", interface_id)
@@ -728,7 +723,7 @@ class ServerThread(threading.Thread):
         self.server.shutdown()
         LOG.debug("ServerThread.stop: Stopping ServerThread")
         self.server.server_close()
-        LOG.info("HomeMatic XML-RPC Server stopped")
+        LOG.info("Max! XML-RPC Server stopped")
 
     def parseCCUSysVar(self, data):
         """Helper to parse type of system variables of CCU"""
