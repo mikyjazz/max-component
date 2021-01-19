@@ -65,7 +65,7 @@ set_install_mode:
       example: 1
     address:
       description: (Optional) Address of max! device or BidCoS-RF to learn
-      example: QEC3948571
+      example: OEQ3948571
 
 put_paramset:
   description: Call to putParamset in the RPC XML interface
@@ -75,7 +75,7 @@ put_paramset:
       example: wireless
     address:
       description: Address of Max! device
-      example: QEC3948571:0
+      example: OEQ3948571:0
     paramset_key:
       description: The paramset_key argument to putParamset
       example: MASTER
