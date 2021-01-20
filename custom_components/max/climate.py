@@ -174,7 +174,7 @@ class HGThermostat(HGDevice, ClimateEntity):
     @property
     def _hg_control_mode(self):
         """Return Control mode."""
-        if GIP_CONTROL_MODE in self._data:
+        if HGIP_CONTROL_MODE in self._data:
             return self._data[HGIP_CONTROL_MODE]
 
         # Max!
