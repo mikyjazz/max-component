@@ -121,7 +121,7 @@ class HGThermostat(HGDevice, ClimateEntity):
     @property
     def current_temperature(self):
         """Return the current temperature."""
-        for node in G_TEMP_MAP:
+        for node in HG_TEMP_MAP:
             if node in self._data:
                 return self._data[node]
 
