@@ -36,7 +36,7 @@ SERVICE_SET_DEVICE_VALUE = "set_device_value"
 SERVICE_SET_INSTALL_MODE = "set_install_mode"
 SERVICE_PUT_PARAMSET = "put_paramset"
 
-HM_DEVICE_TYPES = {
+HG_DEVICE_TYPES = {
     DISCOVER_CLIMATE: [
         "MAXThermostat",
         "MAXWallThermostat",
@@ -46,7 +46,7 @@ HM_DEVICE_TYPES = {
     ],
 }
 
-HM_ATTRIBUTE_SUPPORT = {
+HG_ATTRIBUTE_SUPPORT = {
     "LOWBAT": ["battery", {0: "High", 1: "Low"}],
     "LOW_BAT": ["battery", {0: "High", 1: "Low"}],
     "ERROR": ["error", {0: "No"}],
@@ -67,7 +67,7 @@ HM_ATTRIBUTE_SUPPORT = {
     "STATE_UNCERTAIN": ["state_uncertain", {}],
 }
 
-HM_PRESS_EVENTS = [
+HG_PRESS_EVENTS = [
     "PRESS_SHORT",
     "PRESS_LONG",
     "PRESS_CONT",
@@ -75,7 +75,7 @@ HM_PRESS_EVENTS = [
     "PRESS",
 ]
 
-HM_IMPULSE_EVENTS = ["SEQUENCE_OK"]
+HG_IMPULSE_EVENTS = ["SEQUENCE_OK"]
 
 CONF_RESOLVENAMES_OPTIONS = ["metadata", "json", "xml", False]
 

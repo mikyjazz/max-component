@@ -12,21 +12,21 @@ from homeassistant.components.climate.const import (
 )
 from homeassistant.const import ATTR_TEMPERATURE, TEMP_CELSIUS
 
-from .const import ATTR_DISCOVER_DEVICES, HM_ATTRIBUTE_SUPPORT
+from .const import ATTR_DISCOVER_DEVICES, HG_ATTRIBUTE_SUPPORT
 from .entity import HGDevice
 
-HM_TEMP_MAP = ["ACTUAL_TEMPERATURE", "TEMPERATURE"]
+HG_TEMP_MAP = ["ACTUAL_TEMPERATURE", "TEMPERATURE"]
 
-HM_HUMI_MAP = ["ACTUAL_HUMIDITY", "HUMIDITY"]
+HG_HUMI_MAP = ["ACTUAL_HUMIDITY", "HUMIDITY"]
 
-HM_PRESET_MAP = {
+HG_PRESET_MAP = {
     "BOOST_MODE": PRESET_BOOST,
     "COMFORT_MODE": PRESET_COMFORT,
     "LOWERING_MODE": PRESET_ECO,
 }
 
-HM_CONTROL_MODE = "CONTROL_MODE"
-HMIP_CONTROL_MODE = "SET_POINT_MODE"
+HG_CONTROL_MODE = "CONTROL_MODE"
+HGIP_CONTROL_MODE = "SET_POINT_MODE"
 
 SUPPORT_FLAGS = SUPPORT_TARGET_TEMPERATURE | SUPPORT_PRESET_MODE
 
@@ -66,7 +66,7 @@ class HGThermostat(HGDevice, ClimateEntity):
         if self.target_temperature <= self._maxdevice.OFF_VALUE + 0.5:
             return HVAC_MODE_OFF
         if "MANU_MODE" in self._maxdevice.ACTIONNODE:
-            if self._hm_control_mode == self._maxdevice.MANU_MODE:
+            if self._hg_control_mode == self._maxdevice.MANU_MODE:
                 return HVAC_MODE_HEAT
             return HVAC_MODE_AUTO
 
@@ -91,10 +91,10 @@ class HGThermostat(HGDevice, ClimateEntity):
         if self._data.get("BOOST_MODE", False):
             return "boost"
 
-        if not self._hm_control_mode:
+        if not self._hg_control_mode:
             return None
 
-        mode = HM_ATTRIBUTE_SUPPORT[HM_CONTROL_MODE][1][self._hm_control_mode]
+        mode = HG_ATTRIBUTE_SUPPORT[HG_CONTROL_MODE][1][self._hg_control_mode]
         mode = mode.lower()
 
         # Filter HVAC states
@@ -107,21 +107,21 @@ class HGThermostat(HGDevice, ClimateEntity):
         """Return a list of available preset modes."""
         preset_modes = []
         for mode in self._maxdevice.ACTIONNODE:
-            if mode in HM_PRESET_MAP:
-                preset_modes.append(HM_PRESET_MAP[mode])
+            if mode in HG_PRESET_MAP:
+                preset_modes.append(HG_PRESET_MAP[mode])
         return preset_modes
 
     @property
     def current_humidity(self):
         """Return the current humidity."""
-        for node in HM_HUMI_MAP:
+        for node in HG_HUMI_MAP:
             if node in self._data:
                 return self._data[node]
 
     @property
     def current_temperature(self):
         """Return the current temperature."""
-        for node in HM_TEMP_MAP:
+        for node in G_TEMP_MAP:
             if node in self._data:
                 return self._data[node]
 
@@ -172,10 +172,10 @@ class HGThermostat(HGDevice, ClimateEntity):
         return 0.5
 
     @property
-    def _hm_control_mode(self):
+    def _hg_control_mode(self):
         """Return Control mode."""
-        if HMIP_CONTROL_MODE in self._data:
-            return self._data[HMIP_CONTROL_MODE]
+        if GIP_CONTROL_MODE in self._data:
+            return self._data[HGIP_CONTROL_MODE]
 
         # Max!
         return self._data.get("CONTROL_MODE")
@@ -186,10 +186,10 @@ class HGThermostat(HGDevice, ClimateEntity):
         self._data[self._state] = None
 
         if (
-            HM_CONTROL_MODE in self._maxdevice.ATTRIBUTENODE
-            or HMIP_CONTROL_MODE in self._maxdevice.ATTRIBUTENODE
+            HG_CONTROL_MODE in self._maxdevice.ATTRIBUTENODE
+            or HGIP_CONTROL_MODE in self._maxdevice.ATTRIBUTENODE
         ):
-            self._data[HM_CONTROL_MODE] = None
+            self._data[HG_CONTROL_MODE] = None
 
         for node in self._maxdevice.SENSORNODE.keys():
             self._data[node] = None

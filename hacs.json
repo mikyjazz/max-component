@@ -1,6 +1,9 @@
 {
-  "name": "Max! component",
-  "domains": ["max"],
-  "homeassistant": "0.96.0",
+  "name": "Max!",
+  "domains": [
+    "binary_sensor",
+    "climate"
+  ],
+  "homeassistant": "0.118.0",
   "render_readme": true
 }

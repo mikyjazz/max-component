@@ -174,7 +174,7 @@ class RPCFunctions():
             self.createDeviceObjects(interface_id)
 
     def createDeviceObjects(self, interface_id):
-        """Transform the raw device descriptions into instances of devicetypes.generic.HMDevice or availabe subclass."""
+        """Transform the raw device descriptions into instances of devicetypes.generic.HGDevice or availabe subclass."""
         global WORKING
         WORKING = True
         remote = interface_id.split('-')[-1]
@@ -299,11 +299,7 @@ class RPCFunctions():
             self._devices_raw_dict[remote] = {}
         if remote not in self._paramsets:
             self._paramsets[remote] = {}
-        hmip = self.remotes.get(remote, {}).get('port') in [2010, 32010, 42010]
         for d in dev_descriptions:
-            if hmip:
-                if d in self._devices_raw[remote]:
-                    continue
             self._devices_raw[remote].append(d)
             self._devices_raw_dict[remote][d['ADDRESS']] = d
             self._paramsets[remote][d['ADDRESS']] = {}
@@ -530,7 +526,6 @@ class LockingServerProxy(xmlrpc.client.ServerProxy):
 
         with self.lock:
             parent = xmlrpc.client.ServerProxy
-            # pylint: disable=E1101
             return parent._ServerProxy__request(self, *args, **kwargs)
 
     def __getattr__(self, *args, **kwargs):
@@ -547,7 +542,6 @@ class RequestHandler(SimpleXMLRPCRequestHandler):
     rpc_paths = ('/', '/RPC2',)
 
 
-# pylint: disable=too-many-public-methods
 class ServerThread(threading.Thread):
     """XML-RPC server thread to handle messages from CCU / Homegear"""
 

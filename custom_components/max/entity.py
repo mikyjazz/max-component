@@ -15,7 +15,7 @@ from .const import (
     ATTR_UNIQUE_ID,
     DATA_MAX,
     DOMAIN,
-    HM_ATTRIBUTE_SUPPORT,
+    HG_ATTRIBUTE_SUPPORT,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -81,7 +81,7 @@ class HGDevice(Entity):
         }
 
         # Generate a dictionary with attributes
-        for node, data in HM_ATTRIBUTE_SUPPORT.items():
+        for node, data in HG_ATTRIBUTE_SUPPORT.items():
             # Is an attribute and exists for this object
             if node in self._data:
                 value = data[1].get(self._data[node], self._data[node])
@@ -102,7 +102,7 @@ class HGDevice(Entity):
         try:
             # Initialize datapoints of this object
             self._init_data()
-            self._load_data_from_hm()
+            self._load_data_from_hg()
 
             # Link events from pymax
             self._available = not self._maxdevice.UNREACH
@@ -110,7 +110,7 @@ class HGDevice(Entity):
             self._connected = False
             _LOGGER.error("Exception while linking %s: %s", self._address, str(err))
 
-    def _hm_event_callback(self, device, caller, attribute, value):
+    def _hg_event_callback(self, device, caller, attribute, value):
         """Handle all pymax device events."""
         has_changed = False
 
@@ -150,9 +150,9 @@ class HGDevice(Entity):
                     self._channel_map.add(f"{node}:{channel!s}")
 
         # Set callbacks
-        self._maxdevice.setEventCallback(callback=self._hm_event_callback, bequeath=True)
+        self._maxdevice.setEventCallback(callback=self._hg_event_callback, bequeath=True)
 
-    def _load_data_from_hm(self):
+    def _load_data_from_hg(self):
         """Load first value from pymax."""
         if not self._connected:
             return False
@@ -170,12 +170,12 @@ class HGDevice(Entity):
 
         return True
 
-    def _hm_set_state(self, value):
+    def _hg_set_state(self, value):
         """Set data to main datapoint."""
         if self._state in self._data:
             self._data[self._state] = value
 
-    def _hm_get_state(self):
+    def _hg_get_state(self):
         """Get data from main datapoint."""
         if self._state in self._data:
             return self._data[self._state]
@@ -252,7 +252,7 @@ class HGHub(Entity):
             self.schedule_update_ha_state()
 
     def _update_variables(self, now):
-        """Retrieve all variable data and update hmvariable states."""
+        """Retrieve all variable data and update hgvariable states."""
         variables = self._homegear.getAllSystemVariables(self._name)
         if variables is None:
             return
@@ -268,7 +268,7 @@ class HGHub(Entity):
         if state_change:
             self.schedule_update_ha_state()
 
-    def hm_set_variable(self, name, value):
+    def hg_set_variable(self, name, value):
         """Set variable value on CCU/Homegear."""
         if name not in self._variables:
             _LOGGER.error("Variable %s not found on %s", name, self.name)

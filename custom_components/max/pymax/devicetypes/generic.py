@@ -218,7 +218,7 @@ class HGDevice(HGGeneric):
     def __init__(self, device_description, proxy, resolveparamsets=False):
         super().__init__(device_description, proxy, resolveparamsets)
 
-        self._hmchannels = {}
+        self._hgchannels = {}
 
         # Data point information
         # "NODE_NAME": channel
@@ -261,7 +261,7 @@ class HGDevice(HGGeneric):
         If 'channel' is given, the respective channel's value is returned.
         """
         if channel:
-            return self._hmchannels[channel].getCachedOrUpdatedValue(key)
+            return self._hgchannels[channel].getCachedOrUpdatedValue(key)
 
         try:
             return self._VALUES[key]
@@ -275,14 +275,14 @@ class HGDevice(HGGeneric):
         if self._VALUES.get(PARAM_UNREACH, False):
             return True
         else:
-            for device in self._hmchannels.values():
+            for device in self._hgchannels.values():
                 if device.UNREACH:
                     return True
         return False
 
     @property
     def CHANNELS(self):
-        return self._hmchannels
+        return self._hgchannels
 
     @property
     def SENSORNODE(self):
@@ -337,7 +337,7 @@ class HGDevice(HGGeneric):
                 LOG.warning("HGDevice._getNodeData: %s not found in %s, empty nodeChannelList" % (name, metadata))
                 return None
             if nodeChannel is not None and nodeChannel in self.CHANNELS:
-                return self._hmchannels[nodeChannel].getValue(name)
+                return self._hgchannels[nodeChannel].getValue(name)
 
         LOG.error("HGDevice._getNodeData: %s not found in %s" % (name, metadata))
         return None
@@ -358,7 +358,7 @@ class HGDevice(HGGeneric):
             elif len(nodeChannelList) == 1:
                 nodeChannel = nodeChannelList[0]
             if nodeChannel is not None and nodeChannel in self.CHANNELS:
-                return self._hmchannels[nodeChannel].setValue(name, data)
+                return self._hgchannels[nodeChannel].setValue(name, data)
 
         LOG.error("HGDevice.setNodeData: %s not found with value %s on %i" %
                   (name, data, nodeChannel))
@@ -391,10 +391,10 @@ class HGDevice(HGGeneric):
         if hasattr(callback, '__call__'):
             if channel == 0:
                 self._eventcallbacks.append(callback)
-            elif not bequeath and channel > 0 and channel in self._hmchannels:
-                self._hmchannels[channel]._eventcallbacks.append(callback)
+            elif not bequeath and channel > 0 and channel in self._hgchannels:
+                self._hgchannels[channel]._eventcallbacks.append(callback)
             if bequeath:
-                for channel, device in self._hmchannels.items():
+                for channel, device in self._hgchannels.items():
                     device._eventcallbacks.append(callback)
 
     def setValue(self, key, value, channel=1):

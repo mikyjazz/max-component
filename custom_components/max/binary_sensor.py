@@ -36,7 +36,7 @@ class MaxBinarySensor(HGDevice, BinarySensorEntity):
         """Return true if switch is on."""
         if not self.available:
             return False
-        return bool(self._hm_get_state())
+        return bool(self._hg_get_state())
 
     @property
     def device_class(self):
@@ -61,7 +61,7 @@ class MaxBatterySensor(HGDevice, BinarySensorEntity):
     @property
     def is_on(self):
         """Return True if battery is low."""
-        return bool(self._hm_get_state())
+        return bool(self._hg_get_state())
 
     def _init_data_struct(self):
         """Generate the data dictionary (self._data) from metadata."""

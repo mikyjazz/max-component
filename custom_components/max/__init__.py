@@ -61,9 +61,9 @@ from .const import (
     EVENT_ERROR,
     EVENT_IMPULSE,
     EVENT_KEYPRESS,
-    HM_DEVICE_TYPES,
-    HM_IMPULSE_EVENTS,
-    HM_PRESS_EVENTS,
+    HG_DEVICE_TYPES,
+    HG_IMPULSE_EVENTS,
+    HG_PRESS_EVENTS,
     SERVICE_PUT_PARAMSET,
     SERVICE_RECONNECT,
     SERVICE_SET_DEVICE_VALUE,
@@ -240,7 +240,7 @@ def setup(hass, config):
         localport=config[DOMAIN].get(CONF_LOCAL_PORT, DEFAULT_LOCAL_PORT),
         remotes=remotes,
         systemcallback=bound_system_callback,
-        interface_id="homeassistant-test",
+        interface_id="homeassistant-max",
     )
 
     # Start server thread, connect to hosts, initialize to receive events
@@ -254,7 +254,7 @@ def setup(hass, config):
     for hub_name in conf[CONF_HOSTS]:
         entity_hubs.append(HGHub(hass, homegear, hub_name))
 
-    def _hm_service_virtualkey(service):
+    def _hg_service_virtualkey(service):
         """Service to handle virtualkey servicecalls."""
         address = service.data.get(ATTR_ADDRESS)
         channel = service.data.get(ATTR_CHANNEL)
@@ -268,12 +268,12 @@ def setup(hass, config):
 
         # Parameter doesn't exist for device
         if param not in hgdevice.ACTIONNODE:
-            _LOGGER.error("%s not datapoint in hm device %s", param, address)
+            _LOGGER.error("%s not datapoint in Max! device %s", param, address)
             return
 
         # Channel doesn't exist for device
         if channel not in hgdevice.ACTIONNODE[param]:
-            _LOGGER.error("%i is not a channel in hm device %s", channel, address)
+            _LOGGER.error("%i is not a channel in Max! device %s", channel, address)
             return
 
         # Call parameter
@@ -282,7 +282,7 @@ def setup(hass, config):
     hass.services.register(
         DOMAIN,
         SERVICE_VIRTUALKEY,
-        _hm_service_virtualkey,
+        _hg_service_virtualkey,
         schema=SCHEMA_SERVICE_VIRTUALKEY,
     )
 
@@ -304,7 +304,7 @@ def setup(hass, config):
             return
 
         for hub in entities:
-            hub.hm_set_variable(name, value)
+            hub.hg_set_variable(name, value)
 
     hass.services.register(
         DOMAIN,
@@ -429,7 +429,7 @@ def _system_callback_handler(hass, config, src, *args):
 
         # Register EVENTS
         # Search all devices with an EVENTNODE that includes data
-        bound_event_callback = partial(_hm_event_handler, hass, interface)
+        bound_event_callback = partial(_hg_event_handler, hass, interface)
         for dev in addresses:
             hgdevice = hass.data[DATA_MAX].devices[interface].get(dev)
 
@@ -479,7 +479,7 @@ def _get_devices(hass, discovery_type, keys, interface):
         # Class not supported by discovery type
         if (
             discovery_type != DISCOVER_BATTERY
-            and class_name not in HM_DEVICE_TYPES[discovery_type]
+            and class_name not in HG_DEVICE_TYPES[discovery_type]
         ):
             continue
 
@@ -550,7 +550,7 @@ def _create_ha_id(name, channel, param, count):
         return f"{name} {channel} {param}"
 
 
-def _hm_event_handler(hass, interface, device, caller, attribute, value):
+def _hg_event_handler(hass, interface, device, caller, attribute, value):
     """Handle all pymax device events."""
     try:
         channel = int(device.split(":")[1])
@@ -567,7 +567,7 @@ def _hm_event_handler(hass, interface, device, caller, attribute, value):
     _LOGGER.debug("Event %s for %s channel %i", attribute, hgdevice.NAME, channel)
 
     # Keypress event
-    if attribute in HM_PRESS_EVENTS:
+    if attribute in HG_PRESS_EVENTS:
         hass.bus.fire(
             EVENT_KEYPRESS,
             {ATTR_NAME: hgdevice.NAME, ATTR_PARAM: attribute, ATTR_CHANNEL: channel},
@@ -575,7 +575,7 @@ def _hm_event_handler(hass, interface, device, caller, attribute, value):
         return
 
     # Impulse event
-    if attribute in HM_IMPULSE_EVENTS:
+    if attribute in HG_IMPULSE_EVENTS:
         hass.bus.fire(EVENT_IMPULSE, {ATTR_NAME: hgdevice.NAME, ATTR_CHANNEL: channel})
         return
 

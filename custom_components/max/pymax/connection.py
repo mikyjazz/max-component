@@ -1,20 +1,20 @@
 import logging
 
-from . import _hm
+from . import _hg
 
 LOG = logging.getLogger(__name__)
 
 
 class HGConnection():
     def __init__(self,
-                 local=_hm.LOCAL,
-                 localport=_hm.LOCALPORT,
-                 remotes=_hm.REMOTES,
+                 local=_hg.LOCAL,
+                 localport=_hg.LOCALPORT,
+                 remotes=_hg.REMOTES,
                  remote=None,
                  remoteport=None,
-                 devicefile=_hm.DEVICEFILE,
-                 paramsetfile=_hm.PARAMSETFILE,
-                 interface_id=_hm.INTERFACE_ID,
+                 devicefile=_hg.DEVICEFILE,
+                 paramsetfile=_hg.PARAMSETFILE,
+                 interface_id=_hg.INTERFACE_ID,
                  autostart=False,
                  eventcallback=False,
                  systemcallback=False,
@@ -29,11 +29,11 @@ class HGConnection():
         LOG.debug("HGConnection: Creating server object")
 
         # Device-storage
-        self.devices = _hm.devices
-        self.devices_all = _hm.devices_all
-        self.devices_raw = _hm.devices_raw
-        self.devices_raw_dict = _hm.devices_raw_dict
-        self.paramsets = _hm.paramsets
+        self.devices = _hg.devices
+        self.devices_all = _hg.devices_all
+        self.devices_raw = _hg.devices_raw
+        self.devices_raw_dict = _hg.devices_raw_dict
+        self.paramsets = _hg.paramsets
 
         if remote and remoteport:
             remotes['default']['ip'] = remote
@@ -47,7 +47,7 @@ class HGConnection():
 
 
         try:
-            self._server = _hm.ServerThread(local=local,
+            self._server = _hg.ServerThread(local=local,
                                             localport=localport,
                                             remotes=remotes,
                                             devicefile=devicefile,
