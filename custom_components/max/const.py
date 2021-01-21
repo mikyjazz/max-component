@@ -47,24 +47,19 @@ HG_DEVICE_TYPES = {
 }
 
 HG_ATTRIBUTE_SUPPORT = {
+    "CONFIG_PENDING": ["config", {1: "Configuration"}],
     "LOWBAT": ["battery", {0: "High", 1: "Low"}],
     "LOW_BAT": ["battery", {0: "High", 1: "Low"}],
     "ERROR": ["error", {0: "No"}],
+    "STICKY_UNREACH": ["sticky_unreach", {1: "Unreachable"}],
+    "UNREACH": ["unreach", {1: "Unreachable"}],
     "RSSI_PEER": ["rssi_peer", {}],
     "RSSI_DEVICE": ["rssi_device", {}],
     "VALVE_STATE": ["valve", {}],
-    "LEVEL": ["level", {}],
-    "BATTERY_STATE": ["battery", {}],
     "CONTROL_MODE": [
         "mode",
-        {0: "Auto", 1: "Manual", 2: "Away", 3: "Boost", 4: "Comfort", 5: "Lowering"},
+        {0: "Auto", 1: "Manual", 2: "Away", 3: "Boost"},
     ],
-    "POWER": ["power", {}],
-    "CURRENT": ["current", {}],
-    "VOLTAGE": ["voltage", {}],
-    "OPERATING_VOLTAGE": ["voltage", {}],
-    "WORKING": ["working", {0: "No", 1: "Yes"}],
-    "STATE_UNCERTAIN": ["state_uncertain", {}],
 }
 
 HG_PRESS_EVENTS = [

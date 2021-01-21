@@ -5,8 +5,6 @@ from homeassistant.components.climate.const import (
     HVAC_MODE_HEAT,
     HVAC_MODE_OFF,
     PRESET_BOOST,
-    PRESET_COMFORT,
-    PRESET_ECO,
     SUPPORT_PRESET_MODE,
     SUPPORT_TARGET_TEMPERATURE,
 )
@@ -17,16 +15,11 @@ from .entity import HGDevice
 
 HG_TEMP_MAP = ["ACTUAL_TEMPERATURE", "TEMPERATURE"]
 
-HG_HUMI_MAP = ["ACTUAL_HUMIDITY", "HUMIDITY"]
-
 HG_PRESET_MAP = {
-    "BOOST_MODE": PRESET_BOOST,
-    "COMFORT_MODE": PRESET_COMFORT,
-    "LOWERING_MODE": PRESET_ECO,
+    "BOOST_MODE": PRESET_BOOST
 }
 
 HG_CONTROL_MODE = "CONTROL_MODE"
-HGIP_CONTROL_MODE = "SET_POINT_MODE"
 
 SUPPORT_FLAGS = SUPPORT_TARGET_TEMPERATURE | SUPPORT_PRESET_MODE
 
@@ -112,13 +105,6 @@ class HGThermostat(HGDevice, ClimateEntity):
         return preset_modes
 
     @property
-    def current_humidity(self):
-        """Return the current humidity."""
-        for node in HG_HUMI_MAP:
-            if node in self._data:
-                return self._data[node]
-
-    @property
     def current_temperature(self):
         """Return the current temperature."""
         for node in HG_TEMP_MAP:
@@ -151,10 +137,6 @@ class HGThermostat(HGDevice, ClimateEntity):
         """Set new preset mode."""
         if preset_mode == PRESET_BOOST:
             self._maxdevice.MODE = self._maxdevice.BOOST_MODE
-        elif preset_mode == PRESET_COMFORT:
-            self._maxdevice.MODE = self._maxdevice.COMFORT_MODE
-        elif preset_mode == PRESET_ECO:
-            self._maxdevice.MODE = self._maxdevice.LOWERING_MODE
 
     @property
     def min_temp(self):
@@ -173,12 +155,8 @@ class HGThermostat(HGDevice, ClimateEntity):
 
     @property
     def _hg_control_mode(self):
-        """Return Control mode."""
-        if HGIP_CONTROL_MODE in self._data:
-            return self._data[HGIP_CONTROL_MODE]
-
         # Max!
-        return self._data.get("CONTROL_MODE")
+        return self._data.get(HG_CONTROL_MODE)
 
     def _init_data_struct(self):
         """Generate a data dict (self._data) from the Max! metadata."""
@@ -187,7 +165,6 @@ class HGThermostat(HGDevice, ClimateEntity):
 
         if (
             HG_CONTROL_MODE in self._maxdevice.ATTRIBUTENODE
-            or HGIP_CONTROL_MODE in self._maxdevice.ATTRIBUTENODE
         ):
             self._data[HG_CONTROL_MODE] = None
 

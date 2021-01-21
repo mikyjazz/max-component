@@ -17,8 +17,6 @@ class HGThermostat(HGDevice):
         self.MANU_MODE = 1
         self.PARTY_MODE = 2
         self.BOOST_MODE = 3
-        self.COMFORT_MODE = 4
-        self.LOWERING_MODE = 5
         self.OFF_VALUE = 4.5
 
         self.mode = None
@@ -61,10 +59,6 @@ class HGThermostat(HGDevice):
             set_data = self.get_set_temperature()
         elif setmode == self.BOOST_MODE:
             mode = 'BOOST_MODE'
-        elif setmode == self.COMFORT_MODE:
-            mode = 'COMFORT_MODE'
-        elif setmode == self.LOWERING_MODE:
-            mode = 'LOWERING_MODE'
         else:
             LOG.warning("Thermostat.MODE.setter: Invalid mode: %s" % str(setmode))
         if mode:
@@ -81,24 +75,9 @@ class HGThermostat(HGDevice):
         return self.mode == self.MANU_MODE
 
     @property
-    def PARTYMODE(self):
-        """ Return party mode state. """
-        return self.mode == self.PARTY_MODE
-
-    @property
     def BOOSTMODE(self):
         """ Return boost state. """
         return self.mode == self.BOOST_MODE
-
-    @property
-    def COMFORTMODE(self):
-        """ Return comfort state. """
-        return self.mode == self.COMFORT_MODE
-
-    @property
-    def LOWERINGMODE(self):
-        """ Return lowering state. """
-        return self.mode == self.LOWERING_MODE
 
 
 
