@@ -1,6 +1,6 @@
 import logging
 from ..devicetypes.generic import HGDevice
-from ..devicetypes.helper import (HelperLowBat, HelperBinaryState)
+from ..devicetypes.helper import HelperLowBat, HelperBinaryState, HelperRssiDevice, HelperRssiPeer
 
 LOG = logging.getLogger(__name__)
 

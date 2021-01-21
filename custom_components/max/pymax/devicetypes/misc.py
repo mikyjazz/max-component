@@ -1,6 +1,6 @@
 import logging
 from ..devicetypes.generic import HGDevice
-from ..devicetypes.helper import HelperActionPress, HelperEventRemote, HelperEventPress, HelperRssiPeer, HelperLowBat
+from ..devicetypes.helper import HelperActionPress, HelperEventRemote, HelperEventPress, HelperRssiDevice, HelperRssiPeer, HelperLowBat
 
 LOG = logging.getLogger(__name__)
 
