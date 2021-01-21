@@ -9,7 +9,7 @@ class HGSensor(HGDevice):
     """This class helps to resolve class inheritance order problems."""
 
 
-class MaxShutterContact(HelperBinaryState, HelperLowBat):
+class MaxShutterContact(HelperBinaryState, HelperLowBat, HelperRssiDevice, HelperRssiPeer):
     """Door / Window contact that emits its open/closed state.
        This is a binary sensor."""
 

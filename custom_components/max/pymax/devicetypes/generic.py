@@ -9,6 +9,7 @@ PARAM_OPERATION_EVENT = 4
 
 PARAM_UNREACH = 'UNREACH'
 PARAMSET_VALUES = 'VALUES'
+PARAMSET_MASTER = 'MASTER'
 
 
 class HGGeneric():
@@ -67,7 +68,7 @@ class HGGeneric():
 
     def getParamsetDescription(self, paramset):
         """
-        Descriptions for paramsets are available to determine what can be don with the device.
+        Descriptions for paramsets are available to determine what can be done with the device.
         """
         try:
             self._PARAMSET_DESCRIPTIONS[paramset] = self._proxy.getParamsetDescription(self._ADDRESS, paramset)

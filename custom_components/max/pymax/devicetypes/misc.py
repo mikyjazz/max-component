@@ -39,7 +39,7 @@ class RemotePress(HGEvent, HelperEventPress, HelperActionPress):
         return [1, 2, 3]
 
 
-class RemotePressBattery(HGEvent, HelperEventPress, HelperActionPress, HelperLowBat):
+class RemotePressBattery(HGEvent, HelperEventPress, HelperActionPress, HelperLowBat, HelperRssiDevice, HelperRssiPeer):
     """Remote handle buttons."""
 
     @property
