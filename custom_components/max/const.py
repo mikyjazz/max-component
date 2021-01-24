@@ -60,7 +60,18 @@ HG_ATTRIBUTE_SUPPORT = {
         "mode",
         {0: "Auto", 1: "Manual", 2: "Away", 3: "Boost"},
     ],
+    "ECO_TEMPERATURE": ["window_open_temperature", {}],
+    "COMFORT_TEMPERATURE": ["window_open_temperature", {}],
     "WINDOW_OPEN_TEMPERATURE": ["window_open_temperature", {}],
+    "DECALCIFICATION_TIME": ["decalcification_time", {}],
+    "DECALCIFICATION_WEEKDAY": [
+        "mode",
+        {0: "Saturday", 1: "Sunday", 2: "Moonday", 3: "Tuesday", 4: "Wednesday", 5: "Thursday", 6: "Friday"},
+    ],
+    "PARTY_STOP_DAY": ["party_stop_day", {}],
+    "PARTY_STOP_MONTH": ["party_stop_month", {}],
+    "PARTY_STOP_YEAR": ["party_stop_year", {}],
+    "PARTY_STOP_TIME": ["party_stop_time", {}],
 }
 
 HG_PRESS_EVENTS = [

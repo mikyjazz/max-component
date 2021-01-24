@@ -79,7 +79,10 @@ class HGThermostat(HGDevice):
         """ Return boost state. """
         return self.mode == self.BOOST_MODE
 
-
+    @property
+    def PARTYMODE(self):
+        """ Return boost state. """
+        return self.mode == self.PARTY_MODE
 
 class MAXThermostat(HGThermostat, HelperLowBat, HelperValveState, HelperRssiDevice, HelperRssiPeer):
     """
@@ -94,10 +97,20 @@ class MAXThermostat(HGThermostat, HelperLowBat, HelperValveState, HelperRssiDevi
         self.WRITENODE.update({"SET_TEMPERATURE": [1]})
         self.ACTIONNODE.update({"AUTO_MODE": [1],
                                 "MANU_MODE": [1],
+                                "PARTY_MODE": [1],
                                 "BOOST_MODE": [1]})
         self.ATTRIBUTENODE.update({"CONTROL_MODE": [1],
+                                   "PARTY_STOP_DAY": [1],
+                                   "PARTY_STOP_MONTH": [1],
+                                   "PARTY_STOP_YEAR": [1],
+                                   "PARTY_STOP_TIME": [1],
+                                   "ECO_TEMPERATURE": [1],
                                    "VALVE_STATE": [1],
-                                   "WINDOW_OPEN_TEMPERATURE": [1]})
+                                   "ECO_TEMPERATURE": [1],
+                                   "COMFORT_TEMPERATURE": [1],
+                                   "WINDOW_OPEN_TEMPERATURE": [1],
+                                   "DECALCIFICATION_TIME": [1],
+                                   "DECALCIFICATION_WEEKDAY": [1]})
 
 class MAXWallThermostat(HGThermostat, HelperLowBat, HelperRssiDevice, HelperRssiPeer):
     """
@@ -112,11 +125,18 @@ class MAXWallThermostat(HGThermostat, HelperLowBat, HelperRssiDevice, HelperRssi
         self.WRITENODE.update({"SET_TEMPERATURE": [1]})
         self.ACTIONNODE.update({"AUTO_MODE": [1],
                                 "MANU_MODE": [1],
+                                "PARTY_MODE": [1],
                                 "BOOST_MODE": [1]})
         self.ATTRIBUTENODE.update({"CONTROL_MODE": [1],
-                                   "WINDOW_OPEN_TEMPERATURE": [1]})
-
-
+                                   "PARTY_STOP_DAY": [1],
+                                   "PARTY_STOP_MONTH": [1],
+                                   "PARTY_STOP_YEAR": [1],
+                                   "PARTY_STOP_TIME": [1],
+                                   "ECO_TEMPERATURE": [1],
+                                   "COMFORT_TEMPERATURE": [1],
+                                   "WINDOW_OPEN_TEMPERATURE": [1],
+                                   "DECALCIFICATION_TIME": [1],
+                                   "DECALCIFICATION_WEEKDAY": [1]})
 
 DEVICETYPES = {
     "BC-RT-TRX-CyG": MAXThermostat,
