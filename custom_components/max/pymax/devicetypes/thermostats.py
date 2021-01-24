@@ -59,6 +59,8 @@ class HGThermostat(HGDevice):
             set_data = self.get_set_temperature()
         elif setmode == self.BOOST_MODE:
             mode = 'BOOST_MODE'
+        elif setmode == self.PARTY_MODE:
+            mode = 'PARTY_MODE'
         else:
             LOG.warning("Thermostat.MODE.setter: Invalid mode: %s" % str(setmode))
         if mode:
