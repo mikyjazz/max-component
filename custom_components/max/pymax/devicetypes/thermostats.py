@@ -83,7 +83,7 @@ class HGThermostat(HGDevice):
 
     @property
     def PARTYMODE(self):
-        """ Return boost state. """
+        """ Return party mode state. """
         return self.mode == self.PARTY_MODE
 
 class MAXThermostat(HGThermostat, HelperLowBat, HelperValveState, HelperRssiDevice, HelperRssiPeer):
@@ -106,7 +106,6 @@ class MAXThermostat(HGThermostat, HelperLowBat, HelperValveState, HelperRssiDevi
                                    "PARTY_STOP_MONTH": [1],
                                    "PARTY_STOP_YEAR": [1],
                                    "PARTY_STOP_TIME": [1],
-                                   "ECO_TEMPERATURE": [1],
                                    "VALVE_STATE": [1],
                                    "ECO_TEMPERATURE": [1],
                                    "COMFORT_TEMPERATURE": [1],
