@@ -107,3 +107,4 @@ class HelperRssiPeer(HGDevice):
         return self.getAttributeData("RSSI_PEER", channel)
 
 
+ 

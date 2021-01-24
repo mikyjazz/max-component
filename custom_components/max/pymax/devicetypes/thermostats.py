@@ -83,7 +83,7 @@ class HGThermostat(HGDevice):
 
 class MAXThermostat(HGThermostat, HelperLowBat, HelperValveState, HelperRssiDevice, HelperRssiPeer):
     """
-    BC-RT-TRX-CyG, BC-RT-TRX-CyG-2, BC-RT-TRX-CyG-3, BC-RT-TRX-CyG-4
+    BC-RT-TRX-CyG, BC-RT-TRX-CyN, BC-RT-TRX-CyG-2, BC-RT-TRX-CyG-3, BC-RT-TRX-CyG-4
     ClimateControl-Radiator Thermostat that measures temperature and allows to set a target temperature or use some automatic mode.
     """
     def __init__(self, device_description, proxy, resolveparamsets=True):
@@ -100,7 +100,7 @@ class MAXThermostat(HGThermostat, HelperLowBat, HelperValveState, HelperRssiDevi
 
 class MAXWallThermostat(HGThermostat, HelperLowBat, HelperRssiDevice, HelperRssiPeer):
     """
-    BC-TC-C-WM-4
+    BC-TC-C-WM-4, BC-TC-C-WM-2
     ClimateControl-Wall Thermostat that measures temperature and allows to set a target temperature or use some automatic mode.
     """
     def __init__(self, device_description, proxy, resolveparamsets=True):
