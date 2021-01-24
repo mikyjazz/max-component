@@ -60,6 +60,7 @@ HG_ATTRIBUTE_SUPPORT = {
         "mode",
         {0: "Auto", 1: "Manual", 2: "Away", 3: "Boost"},
     ],
+    "WINDOW_OPEN_TEMPERATURE": ["windows_open_temperature", {}],
 }
 
 HG_PRESS_EVENTS = [
