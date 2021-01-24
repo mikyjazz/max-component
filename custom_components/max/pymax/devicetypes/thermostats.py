@@ -11,7 +11,7 @@ class HGThermostat(HGDevice):
     """
     ClimateControl-RadiatorThermostat that measures temperature and allows to set a target temperature or use some automatic mode.
     """
-    def __init__(self, device_description, proxy, resolveparamsets=False):
+    def __init__(self, device_description, proxy, resolveparamsets=True):
         super().__init__(device_description, proxy, resolveparamsets)
 
         # constante
@@ -115,7 +115,7 @@ class MAXThermostat(HGThermostat, HelperLowBat, HelperValveState, HelperRssiDevi
                                    "DECALCIFICATION_TIME": [1],
                                    "DECALCIFICATION_WEEKDAY": [1]})
         for dow in MAX_DOW:
-            for step in range(1, 13):
+            for step in range(1, 14):
                 self.ATTRIBUTENODE.update({"ENDTIME_"+dow+"_"+str(step): [1],
                                            "TEMPERATURE_"+dow+"_"+str(step): [1]})
 
@@ -146,7 +146,7 @@ class MAXWallThermostat(HGThermostat, HelperLowBat, HelperRssiDevice, HelperRssi
                                    "DECALCIFICATION_TIME": [1],
                                    "DECALCIFICATION_WEEKDAY": [1]})
         for dow in MAX_DOW:
-            for step in range(1, 13):
+            for step in range(1, 14):
                 self.ATTRIBUTENODE.update({"ENDTIME_"+dow+"_"+str(step): [1],
                                            "TEMPERATURE_"+dow+"_"+str(step): [1]})
 

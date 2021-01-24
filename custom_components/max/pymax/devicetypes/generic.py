@@ -133,7 +133,7 @@ class HGGeneric():
 
 
 class HGChannel(HGGeneric):
-    def __init__(self, device_description, proxy, resolveparamsets=False):
+    def __init__(self, device_description, proxy, resolveparamsets=True):
         super().__init__(device_description, proxy, resolveparamsets)
 
         # These properties only exist for device-channels
@@ -216,7 +216,7 @@ class HGChannel(HGGeneric):
 
 
 class HGDevice(HGGeneric):
-    def __init__(self, device_description, proxy, resolveparamsets=False):
+    def __init__(self, device_description, proxy, resolveparamsets=True):
         super().__init__(device_description, proxy, resolveparamsets)
 
         self._hgchannels = {}
