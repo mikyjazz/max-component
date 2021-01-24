@@ -96,7 +96,8 @@ class MAXThermostat(HGThermostat, HelperLowBat, HelperValveState, HelperRssiDevi
                                 "MANU_MODE": [1],
                                 "BOOST_MODE": [1]})
         self.ATTRIBUTENODE.update({"CONTROL_MODE": [1],
-                                   "VALVE_STATE": [1]})
+                                   "VALVE_STATE": [1],
+                                   "WINDOW_OPEN_TEMPERATURE": [1]})
 
 class MAXWallThermostat(HGThermostat, HelperLowBat, HelperRssiDevice, HelperRssiPeer):
     """
@@ -112,7 +113,8 @@ class MAXWallThermostat(HGThermostat, HelperLowBat, HelperRssiDevice, HelperRssi
         self.ACTIONNODE.update({"AUTO_MODE": [1],
                                 "MANU_MODE": [1],
                                 "BOOST_MODE": [1]})
-        self.ATTRIBUTENODE.update({"CONTROL_MODE": [1]})
+        self.ATTRIBUTENODE.update({"CONTROL_MODE": [1],
+                                   "WINDOW_OPEN_TEMPERATURE": [1]})
 
 
 
