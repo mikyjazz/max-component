@@ -2,6 +2,8 @@ import logging
 from ..devicetypes.generic import HGDevice
 from ..devicetypes.helper import HelperValveState, HelperLowBat, HelperRssiPeer, HelperRssiDevice
 
+MAX_DOW = ["SATURDAY", "SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"]
+
 LOG = logging.getLogger(__name__)
 
 
@@ -112,6 +114,11 @@ class MAXThermostat(HGThermostat, HelperLowBat, HelperValveState, HelperRssiDevi
                                    "WINDOW_OPEN_TEMPERATURE": [1],
                                    "DECALCIFICATION_TIME": [1],
                                    "DECALCIFICATION_WEEKDAY": [1]})
+        for dow in MAX_DOW:
+            for step in range(1, 13):
+                self.ATTRIBUTENODE.update({"ENDTIME_"+dow+"_"+str(step): [1],
+                                           "TEMPERATURE_"+dow+"_"+str(step): [1]})
+
 
 class MAXWallThermostat(HGThermostat, HelperLowBat, HelperRssiDevice, HelperRssiPeer):
     """
@@ -138,6 +145,10 @@ class MAXWallThermostat(HGThermostat, HelperLowBat, HelperRssiDevice, HelperRssi
                                    "WINDOW_OPEN_TEMPERATURE": [1],
                                    "DECALCIFICATION_TIME": [1],
                                    "DECALCIFICATION_WEEKDAY": [1]})
+        for dow in MAX_DOW:
+            for step in range(1, 13):
+                self.ATTRIBUTENODE.update({"ENDTIME_"+dow+"_"+str(step): [1],
+                                           "TEMPERATURE_"+dow+"_"+str(step): [1]})
 
 DEVICETYPES = {
     "BC-RT-TRX-CyG": MAXThermostat,
