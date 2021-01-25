@@ -11,7 +11,7 @@ class HGThermostat(HGDevice):
     """
     ClimateControl-RadiatorThermostat that measures temperature and allows to set a target temperature or use some automatic mode.
     """
-    def __init__(self, device_description, proxy, resolveparamsets=True):
+    def __init__(self, device_description, proxy, resolveparamsets=False):
         super().__init__(device_description, proxy, resolveparamsets)
 
         # constante

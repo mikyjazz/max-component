@@ -29,6 +29,7 @@ class HGGeneric():
         self._paramsets = {}
         self._eventcallbacks = []
         self._name = None
+        self._MASTER = {}   # Dictionary to cache master settings. 
         self._VALUES = {}   # Dictionary to cache values. They are updated in the event() function.
         self._VALUES[PARAM_UNREACH] = None
 
@@ -90,6 +91,8 @@ class HGGeneric():
                         if self.PARAMSETS:
                             if self.PARAMSETS.get(PARAMSET_VALUES):
                                 self._VALUES[PARAM_UNREACH] = self.PARAMSETS.get(PARAMSET_VALUES).get(PARAM_UNREACH)
+                            if self.PARAMSETS.get(PARAMSET_MASTER):
+                                self._MASTER = self.PARAMSETS.get(PARAMSET_MASTER).copy()
                         return True
             return False
         except Exception as err:
@@ -196,8 +199,7 @@ class HGChannel(HGGeneric):
             self._proxy.setValue(self._ADDRESS, key, value)
             return True
         except Exception as err:
-            LOG.error("HGGeneric.setValue: %s on %s Exception: %s", key,
-                      self._ADDRESS, err)
+            LOG.error("HGGeneric.setValue: %s on %s Exception: %s", key, self._ADDRESS, err)
             return False
 
     def getValue(self, key):
@@ -210,13 +212,12 @@ class HGChannel(HGGeneric):
             self._VALUES[key] = returnvalue
             return returnvalue
         except Exception as err:
-            LOG.info("HGGeneric.getValue: %s on %s Exception: %s", key,
-                     self._ADDRESS, err)
+            LOG.info("HGGeneric.getValue: %s on %s Exception: %s", key, self._ADDRESS, err)
             return False
 
 
 class HGDevice(HGGeneric):
-    def __init__(self, device_description, proxy, resolveparamsets=True):
+    def __init__(self, device_description, proxy, resolveparamsets=False):
         super().__init__(device_description, proxy, resolveparamsets)
 
         self._hgchannels = {}

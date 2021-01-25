@@ -82,7 +82,7 @@ class RPCFunctions():
         return True
 
     def setValue(self, address, value_key, value):
-        LOG.debug("RPCFunctions.getValue: address=%s, value_key=%s, value=%s" % (address, value_key, value))
+        LOG.debug("RPCFunctions.setValue: address=%s, value_key=%s, value=%s" % (address, value_key, value))
         return ""
 
     def init(self, url, interface_id=None):
