@@ -16,6 +16,7 @@ from .const import (
     DATA_MAX,
     DOMAIN,
     HG_ATTRIBUTE_SUPPORT,
+    HG_MASTER_SUPPORT
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -137,6 +138,7 @@ class HGDevice(Entity):
             self._maxdevice.WRITENODE,
             self._maxdevice.EVENTNODE,
             self._maxdevice.ACTIONNODE,
+            self._maxdevice.MASTERNODE,
         ):
             for node, channels in metadata.items():
                 # Data is needed for this instance
@@ -163,6 +165,7 @@ class HGDevice(Entity):
             (self._maxdevice.WRITENODE, self._maxdevice.getWriteData),
             (self._maxdevice.SENSORNODE, self._maxdevice.getSensorData),
             (self._maxdevice.BINARYNODE, self._maxdevice.getBinaryData),
+            (self._maxdevice.MASTERNODE, self._maxdevice.getMasterData),
         ):
             for node in metadata:
                 if metadata[node] and node in self._data:

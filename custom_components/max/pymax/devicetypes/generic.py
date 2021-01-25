@@ -173,6 +173,16 @@ class HGChannel(HGGeneric):
         except KeyError:
             return self.getValue(key)
 
+    def getCachedOrUpdatedMaster(self, key):
+        """ Gets the device's master values with the given key.
+
+        If the key is not found in the cache, the value is queried from the host.
+        """
+        try:
+            return self._MASTER[key]
+        except KeyError:
+            return self.getMaster(key)
+
     @property
     def PARENT(self):
         return self._PARENT
@@ -215,6 +225,30 @@ class HGChannel(HGGeneric):
             LOG.info("HGGeneric.getValue: %s on %s Exception: %s", key, self._ADDRESS, err)
             return False
 
+    def setMaster(self, key, value):
+        """
+        Write value to device master parameters of channel.
+        """
+        LOG.debug("HGGeneric.setMaster: address = '%s', key = '%s' value = '%s'", self._ADDRESS, key, value)
+        try:
+            self._proxy.setMaster(self._ADDRESS, key, value)
+            return True
+        except Exception as err:
+            LOG.error("HGGeneric.setMaster: %s on %s Exception: %s", key, self._ADDRESS, err)
+            return False
+
+    def getMaster(self, key):
+        """
+        Get values from device master parameters of channel.
+        """
+        LOG.debug("HGGeneric.getMaster: address = '%s', key = '%s'", self._ADDRESS, key)
+        try:
+            returnvalue = self._proxy.getMaster(self._ADDRESS, key)
+            self._MASTER[key] = returnvalue
+            return returnvalue
+        except Exception as err:
+            LOG.info("HGGeneric.getMaster: %s on %s Exception: %s", key, self._ADDRESS, err)
+            return False
 
 class HGDevice(HGGeneric):
     def __init__(self, device_description, proxy, resolveparamsets=False):
@@ -233,6 +267,7 @@ class HGDevice(HGGeneric):
         self._WRITENODE = {}
         self._EVENTNODE = {}
         self._ACTIONNODE = {}
+        self._MASTERNODE = {}
 
         # These properties only exist for interfaces themselves
         self._CHILDREN = device_description.get('CHILDREN')
@@ -269,6 +304,21 @@ class HGDevice(HGGeneric):
             return self._VALUES[key]
         except KeyError:
             value = self._VALUES[key] = self.getValue(key)
+            return value
+
+    def getCachedOrUpdatedMaster(self, key, channel=None):
+        """ Gets the channel's master value with the given key.
+
+        If the key is not found in the cache, the value is queried from the host.
+        If 'channel' is given, the respective channel's value is returned.
+        """
+        if channel:
+            return self._hgchannels[channel].getCachedOrUpdatedMaster(key)
+
+        try:
+            return self._MASTER[key]
+        except KeyError:
+            value = self._MASTER[key] = self.getMaster(key)
             return value
 
     @property
@@ -310,8 +360,12 @@ class HGDevice(HGGeneric):
     def ACTIONNODE(self):
         return self._ACTIONNODE
 
+    @property
+    def MASTERNODE(self):
+        return self._MASTERNODE
+
     def getAttributeData(self, name, channel=None):
-        """ Returns a attribut """
+        """ Returns a attribute node """
         return self._getNodeData(name, self._ATTRIBUTENODE, channel)
 
     def getBinaryData(self, name, channel=None):
@@ -323,8 +377,12 @@ class HGDevice(HGGeneric):
         return self._getNodeData(name, self._SENSORNODE, channel)
 
     def getWriteData(self, name, channel=None):
-        """ Returns a sensor node """
+        """ Returns a write node """
         return self._getNodeData(name, self._WRITENODE, channel)
+
+    def getMasterData(self, name, channel=None):
+        """ Returns a write node """
+        return self._getMasterData(name, self._MASTERNODE, channel)
 
     def _getNodeData(self, name, metadata, channel=None):
         """ Returns a data point from data"""
@@ -344,14 +402,35 @@ class HGDevice(HGGeneric):
         LOG.error("HGDevice._getNodeData: %s not found in %s" % (name, metadata))
         return None
 
+    def _getMasterData(self, name, metadata, channel=None):
+        """ Returns a data point from data"""
+        nodeChannel = None
+        if name in metadata:
+            nodeChannelList = metadata[name]
+            if len(nodeChannelList) > 1:
+                nodeChannel = channel if channel is not None else nodeChannelList[0]
+            elif len(nodeChannelList) == 1:
+                nodeChannel = nodeChannelList[0]
+            else:
+                LOG.warning("HGDevice._getMasterData: %s not found in %s, empty nodeChannelList" % (name, metadata))
+                return None
+            if nodeChannel is not None and nodeChannel in self.CHANNELS:
+                return self._hgchannels[nodeChannel].getMaster(name)
+
+        LOG.error("HGDevice._getMasterData: %s not found in %s" % (name, metadata))
+        return None
+
     def writeNodeData(self, name, data, channel=None):
         return self._setNodeData(name, self.WRITENODE, data, channel)
 
     def actionNodeData(self, name, data, channel=None):
         return self._setNodeData(name, self.ACTIONNODE, data, channel)
 
+    def writeMasterData(self, name, data, channel=None):
+        return self._setMasterData(name, self.MASTERNODE, data, channel)
+
     def _setNodeData(self, name, metadata, data, channel=None):
-        """ Returns a data point from data"""
+        """ Write a data point to data"""
         nodeChannel = None
         if name in metadata:
             nodeChannelList = metadata[name]
@@ -362,7 +441,23 @@ class HGDevice(HGGeneric):
             if nodeChannel is not None and nodeChannel in self.CHANNELS:
                 return self._hgchannels[nodeChannel].setValue(name, data)
 
-        LOG.error("HGDevice.setNodeData: %s not found with value %s on %i" %
+        LOG.error("HGDevice._setNodeData: %s not found with value %s on %i" %
+                  (name, data, nodeChannel))
+        return False
+
+    def _setMasterData(self, name, metadata, data, channel=None):
+        """ Write a value point to master"""
+        nodeChannel = None
+        if name in metadata:
+            nodeChannelList = metadata[name]
+            if len(nodeChannelList) > 1:
+                nodeChannel = channel if channel is not None else nodeChannelList[0]
+            elif len(nodeChannelList) == 1:
+                nodeChannel = nodeChannelList[0]
+            if nodeChannel is not None and nodeChannel in self.CHANNELS:
+                return self._hgchannels[nodeChannel].setMaster(name, data)
+
+        LOG.error("HGDevice._setMasterData: %s not found with value %s on %i" %
                   (name, data, nodeChannel))
         return False
 

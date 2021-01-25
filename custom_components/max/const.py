@@ -58,7 +58,7 @@ HG_ATTRIBUTE_SUPPORT = {
     "VALVE_STATE": ["valve", {}],
     "CONTROL_MODE": [
         "mode",
-        {0: "Auto", 1: "Manual", 2: "Party", 3: "Boost"},
+        {0: "Auto", 1: "Manual", 2: "Away", 3: "Boost"},
     ],
     "ECO_TEMPERATURE": ["eco_temperature", {}],
     "COMFORT_TEMPERATURE": ["comfort_temperature", {}],
@@ -72,6 +72,9 @@ HG_ATTRIBUTE_SUPPORT = {
     "PARTY_STOP_MONTH": ["party_stop_month", {}],
     "PARTY_STOP_YEAR": ["party_stop_year", {}],
     "PARTY_STOP_TIME": ["party_stop_time", {}],
+}
+
+HG_MASTER_SUPPORT = {
     "ENDTIME_SATURDAY_1": ["endtime_saturday_1", {}],
     "ENDTIME_SATURDAY_2": ["endtime_saturday_2", {}],
     "ENDTIME_SATURDAY_3": ["endtime_saturday_3", {}],

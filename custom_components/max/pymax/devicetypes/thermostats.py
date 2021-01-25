@@ -116,7 +116,7 @@ class MAXThermostat(HGThermostat, HelperLowBat, HelperValveState, HelperRssiDevi
                                    "DECALCIFICATION_WEEKDAY": [1]})
         for dow in MAX_DOW:
             for step in range(1, 14):
-                self.ATTRIBUTENODE.update({"ENDTIME_"+dow+"_"+str(step): [1],
+                self.MASTERNODE.update({"ENDTIME_"+dow+"_"+str(step): [1],
                                            "TEMPERATURE_"+dow+"_"+str(step): [1]})
 
 
@@ -147,7 +147,7 @@ class MAXWallThermostat(HGThermostat, HelperLowBat, HelperRssiDevice, HelperRssi
                                    "DECALCIFICATION_WEEKDAY": [1]})
         for dow in MAX_DOW:
             for step in range(1, 14):
-                self.ATTRIBUTENODE.update({"ENDTIME_"+dow+"_"+str(step): [1],
+                self.MASTERNODE.update({"ENDTIME_"+dow+"_"+str(step): [1],
                                            "TEMPERATURE_"+dow+"_"+str(step): [1]})
 
 DEVICETYPES = {

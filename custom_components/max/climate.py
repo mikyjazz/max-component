@@ -163,9 +163,7 @@ class HGThermostat(HGDevice, ClimateEntity):
         self._state = next(iter(self._maxdevice.WRITENODE.keys()))
         self._data[self._state] = None
 
-        if (
-            HG_CONTROL_MODE in self._maxdevice.ATTRIBUTENODE
-        ):
+        if HG_CONTROL_MODE in self._maxdevice.ATTRIBUTENODE:
             self._data[HG_CONTROL_MODE] = None
 
         for node in self._maxdevice.SENSORNODE.keys():
