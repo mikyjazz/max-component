@@ -29,7 +29,6 @@ class HGGeneric():
         self._paramsets = {}
         self._eventcallbacks = []
         self._name = None
-        self._MASTER = {}   # Dictionary to cache master settings. 
         self._VALUES = {}   # Dictionary to cache values. They are updated in the event() function.
         self._VALUES[PARAM_UNREACH] = None
 
@@ -91,8 +90,6 @@ class HGGeneric():
                         if self.PARAMSETS:
                             if self.PARAMSETS.get(PARAMSET_VALUES):
                                 self._VALUES[PARAM_UNREACH] = self.PARAMSETS.get(PARAMSET_VALUES).get(PARAM_UNREACH)
-                            if self.PARAMSETS.get(PARAMSET_MASTER):
-                                self._MASTER = self.PARAMSETS.get(PARAMSET_MASTER).copy()
                         return True
             return False
         except Exception as err:
@@ -136,7 +133,7 @@ class HGGeneric():
 
 
 class HGChannel(HGGeneric):
-    def __init__(self, device_description, proxy, resolveparamsets=True):
+    def __init__(self, device_description, proxy, resolveparamsets=False):
         super().__init__(device_description, proxy, resolveparamsets)
 
         # These properties only exist for device-channels
@@ -172,16 +169,6 @@ class HGChannel(HGGeneric):
             return self._VALUES[key]
         except KeyError:
             return self.getValue(key)
-
-    def getCachedOrUpdatedMaster(self, key):
-        """ Gets the device's master values with the given key.
-
-        If the key is not found in the cache, the value is queried from the host.
-        """
-        try:
-            return self._MASTER[key]
-        except KeyError:
-            return self.getMaster(key)
 
     @property
     def PARENT(self):
@@ -225,31 +212,6 @@ class HGChannel(HGGeneric):
             LOG.info("HGGeneric.getValue: %s on %s Exception: %s", key, self._ADDRESS, err)
             return False
 
-    def setMaster(self, key, value):
-        """
-        Write value to device master parameters of channel.
-        """
-        LOG.debug("HGGeneric.setMaster: address = '%s', key = '%s' value = '%s'", self._ADDRESS, key, value)
-        try:
-            self._proxy.setMaster(self._ADDRESS, key, value)
-            return True
-        except Exception as err:
-            LOG.error("HGGeneric.setMaster: %s on %s Exception: %s", key, self._ADDRESS, err)
-            return False
-
-    def getMaster(self, key):
-        """
-        Get values from device master parameters of channel.
-        """
-        LOG.debug("HGGeneric.getMaster: address = '%s', key = '%s'", self._ADDRESS, key)
-        try:
-            returnvalue = self._proxy.getMaster(self._ADDRESS, key)
-            self._MASTER[key] = returnvalue
-            return returnvalue
-        except Exception as err:
-            LOG.info("HGGeneric.getMaster: %s on %s Exception: %s", key, self._ADDRESS, err)
-            return False
-
 class HGDevice(HGGeneric):
     def __init__(self, device_description, proxy, resolveparamsets=False):
         super().__init__(device_description, proxy, resolveparamsets)
@@ -267,7 +229,6 @@ class HGDevice(HGGeneric):
         self._WRITENODE = {}
         self._EVENTNODE = {}
         self._ACTIONNODE = {}
-        self._MASTERNODE = {}
 
         # These properties only exist for interfaces themselves
         self._CHILDREN = device_description.get('CHILDREN')
@@ -304,21 +265,6 @@ class HGDevice(HGGeneric):
             return self._VALUES[key]
         except KeyError:
             value = self._VALUES[key] = self.getValue(key)
-            return value
-
-    def getCachedOrUpdatedMaster(self, key, channel=None):
-        """ Gets the channel's master value with the given key.
-
-        If the key is not found in the cache, the value is queried from the host.
-        If 'channel' is given, the respective channel's value is returned.
-        """
-        if channel:
-            return self._hgchannels[channel].getCachedOrUpdatedMaster(key)
-
-        try:
-            return self._MASTER[key]
-        except KeyError:
-            value = self._MASTER[key] = self.getMaster(key)
             return value
 
     @property
@@ -360,10 +306,6 @@ class HGDevice(HGGeneric):
     def ACTIONNODE(self):
         return self._ACTIONNODE
 
-    @property
-    def MASTERNODE(self):
-        return self._MASTERNODE
-
     def getAttributeData(self, name, channel=None):
         """ Returns a attribute node """
         return self._getNodeData(name, self._ATTRIBUTENODE, channel)
@@ -379,10 +321,6 @@ class HGDevice(HGGeneric):
     def getWriteData(self, name, channel=None):
         """ Returns a write node """
         return self._getNodeData(name, self._WRITENODE, channel)
-
-    def getMasterData(self, name, channel=None):
-        """ Returns a write node """
-        return self._getMasterData(name, self._MASTERNODE, channel)
 
     def _getNodeData(self, name, metadata, channel=None):
         """ Returns a data point from data"""
@@ -425,9 +363,6 @@ class HGDevice(HGGeneric):
 
     def actionNodeData(self, name, data, channel=None):
         return self._setNodeData(name, self.ACTIONNODE, data, channel)
-
-    def writeMasterData(self, name, data, channel=None):
-        return self._setMasterData(name, self.MASTERNODE, data, channel)
 
     def _setNodeData(self, name, metadata, data, channel=None):
         """ Write a data point to data"""

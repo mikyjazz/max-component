@@ -93,7 +93,7 @@ class RPCFunctions():
                  remotes={},
                  eventcallback=False,
                  systemcallback=False,
-                 resolveparamsets=True):
+                 resolveparamsets=False):
         global devices, devices_all, devices_raw, devices_raw_dict, paramsets
         LOG.debug("RPCFunctions.__init__")
         self.devicefile = None
@@ -554,7 +554,7 @@ class ServerThread(threading.Thread):
                  interface_id=INTERFACE_ID,
                  eventcallback=False,
                  systemcallback=False,
-                 resolveparamsets=True):
+                 resolveparamsets=False):
         LOG.debug("ServerThread.__init__")
         threading.Thread.__init__(self)
 

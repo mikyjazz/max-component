@@ -19,7 +19,7 @@ class HGConnection():
                  eventcallback=False,
                  systemcallback=False,
                  resolvenames=None,
-                 resolveparamsets=True,
+                 resolveparamsets=False,
                  rpcusername=None,
                  rpcpassword=None):
         """
