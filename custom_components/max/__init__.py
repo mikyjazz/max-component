@@ -241,6 +241,7 @@ def setup(hass, config):
         remotes=remotes,
         systemcallback=bound_system_callback,
         interface_id="homeassistant-max",
+        resolveparamsets=True
     )
 
     # Start server thread, connect to hosts, initialize to receive events
