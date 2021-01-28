@@ -33,20 +33,23 @@ set_device_value:
   description: Set a device property on RPC XML interface.
   fields:
     address:
-      description: Address of max device or BidCoS-RF for virtual remote
-      example: BidCoS-RF
+      description: Address of max device 
+      example:  OEQ3948571
     channel:
-      description: Channel for calling a keypress
+      description: Channel for setting value
       example: 1
     param:
-      description: Event to send i.e. PRESS_LONG, PRESS_SHORT
-      example: PRESS_LONG
-    interface:
-      description: (Optional) for set an interface value
-      example: Interfaces name from config
+      description: Name of the param to set
+      example: WINDOW_OPEN_TEMPERATURE
     value:
       description: New value
-      example: 1
+      example: 12
+    valuetype:
+      description: (Optional) Type of the value
+      example: double
+    interface:
+      description: (Optional) for set an interface value.
+      example: wireless
 
 reconnect:
   description: Reconnect to all Max! Hubs.

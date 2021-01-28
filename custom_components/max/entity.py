@@ -134,6 +134,7 @@ class HGDevice(Entity):
             self._maxdevice.SENSORNODE,
             self._maxdevice.BINARYNODE,
             self._maxdevice.ATTRIBUTENODE,
+            self._maxdevice.MASTERNODE,
             self._maxdevice.WRITENODE,
             self._maxdevice.EVENTNODE,
             self._maxdevice.ACTIONNODE,
@@ -160,6 +161,7 @@ class HGDevice(Entity):
         # Read data from pymax
         for metadata, funct in (
             (self._maxdevice.ATTRIBUTENODE, self._maxdevice.getAttributeData),
+            (self._maxdevice.MASTERNODE, self._maxdevice.getMasterData),
             (self._maxdevice.WRITENODE, self._maxdevice.getWriteData),
             (self._maxdevice.SENSORNODE, self._maxdevice.getSensorData),
             (self._maxdevice.BINARYNODE, self._maxdevice.getBinaryData),
@@ -186,6 +188,8 @@ class HGDevice(Entity):
         # Add all attributes to data dictionary
         for data_note in self._maxdevice.ATTRIBUTENODE:
             self._data.update({data_note: None})
+        for master_note in self._maxdevice.MASTERNODE:
+            self._data.update({master_note: None})
 
         # Initialize device specific data
         self._init_data_struct()
