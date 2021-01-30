@@ -166,6 +166,9 @@ class HGChannel(HGGeneric):
 
         If the key is not found in the cache, the value is queried from the host.
         """
+        if key == 'ENDTIME_SATURDAY_1':
+            return 'R4'
+
         try:
             return self._VALUES[key]
         except KeyError:
@@ -214,6 +217,9 @@ class HGChannel(HGGeneric):
         """
         Some devices allow to directly get values for specific parameters.
         """
+        if key == 'ENDTIME_SATURDAY_1':
+            return 'R2'
+
         LOG.debug("HGChannel.getValue: address = '%s', key = '%s'", self._ADDRESS, key)
         try:
             returnvalue = self._proxy.getValue(self._ADDRESS, key)
@@ -295,6 +301,9 @@ class HGDevice(HGGeneric):
         If the key is not found in the cache, the value is queried from the host.
         If 'channel' is given, the respective channel's value is returned.
         """
+        if key == 'ENDTIME_SATURDAY_1':
+            return 'R3'
+
         if channel:
             return self._hgchannels[channel].getCachedOrUpdatedValue(key)
 
@@ -505,6 +514,8 @@ class HGDevice(HGGeneric):
         """
         Some devices allow to directly get values for specific parameters.
         """
+        if key == 'ENDTIME_SATURDAY_1':
+            return 'R1'
         if channel in self.CHANNELS:
             return self.CHANNELS[channel].getValue(key)
 
