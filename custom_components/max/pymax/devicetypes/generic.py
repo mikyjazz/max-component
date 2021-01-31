@@ -235,7 +235,7 @@ class HGChannel(HGGeneric):
             LOG.error("HGChannel.setMaster: %s on %s Exception: %s", key, self._ADDRESS, err)
             return False
 
-    //here
+    #here
     def getMaster(self, key):
         """
         Some devices allow to directly get values for specific parameters.
