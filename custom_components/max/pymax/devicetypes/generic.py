@@ -242,7 +242,9 @@ class HGChannel(HGGeneric):
         """
         LOG.debug("HGChannel.getMaster: address = '%s', key = '%s'", self._ADDRESS, key)
         try:
-            returnvalue = self._proxy.getMaster(self._ADDRESS, key)
+            returnvalue = self.PARAMSETS[PARAMSET_MASTER].get(key);
+            #self._proxy.getParamset(Integer peerId, Integer channel, Integer remotePeerId, Integer remoteChannel)            
+            #returnvalue = self._proxy.getMaster(self._ADDRESS, key)
             self._MASTER[key] = returnvalue
             return returnvalue
         except Exception as err:
