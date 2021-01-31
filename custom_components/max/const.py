@@ -46,6 +46,16 @@ HG_DEVICE_TYPES = {
     ],
 }
 
+HG_BATTERY_ATTRIBUTE_SUPPORT = {
+    "LOWBAT": ["battery", {0: "High", 1: "Low"}],
+    "LOW_BAT": ["battery", {0: "High", 1: "Low"}],
+    "ERROR": ["error", {0: "No"}],
+    "STICKY_UNREACH": ["sticky_unreach", {1: "Unreachable"}],
+    "UNREACH": ["unreach", {1: "Unreachable"}],
+    "RSSI_PEER": ["rssi_peer", {}],
+    "RSSI_DEVICE": ["rssi_device", {}]
+}
+
 HG_ATTRIBUTE_SUPPORT = {
     "CONFIG_PENDING": ["config", {1: "Configuration"}],
     "LOWBAT": ["battery", {0: "High", 1: "Low"}],

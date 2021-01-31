@@ -5,7 +5,7 @@ from homeassistant.components.binary_sensor import (
     BinarySensorEntity,
 )
 
-from .const import ATTR_DISCOVER_DEVICES, ATTR_DISCOVERY_TYPE, DISCOVER_BATTERY
+from .const import ATTR_DISCOVER_DEVICES, ATTR_DISCOVERY_TYPE, DISCOVER_BATTERY, HG_BATTERY_ATTRIBUTE_SUPPORT
 from .entity import HGDevice
 
 SENSOR_TYPES_CLASS = {
@@ -68,3 +68,23 @@ class MaxBatterySensor(HGDevice, BinarySensorEntity):
         # Add state to data struct
         if self._state:
             self._data.update({self._state: None})
+
+
+    @property
+    def device_state_attributes(self):
+        """Return device specific state attributes."""
+
+        # Static attributes
+        attr = {
+            "id": self._maxdevice.ADDRESS,
+            "interface": self._interface,
+        }
+
+        # Generate a dictionary with attributes
+        for node, data in HG_BATTERY_ATTRIBUTE_SUPPORT.items():
+            # Is an attribute and exists for this object
+            if node in self._data:
+                value = data[1].get(self._data[node], self._data[node])
+                attr[data[0]] = value
+
+        return attr
