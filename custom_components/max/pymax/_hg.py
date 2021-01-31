@@ -210,7 +210,7 @@ class RPCFunctions():
                 try:
                     if dev['ADDRESS'] not in self.devices_all[remote]:
                         deviceObject = HGChannel(
-                            dev, self._proxies[interface_id], True) #self.resolveparamsets)
+                            dev, self._proxies[interface_id], self.resolveparamsets)
                         self.devices_all[remote][dev['ADDRESS']] = deviceObject
                         self.devices[remote][dev['PARENT']].CHANNELS[
                             dev['INDEX']] = deviceObject
